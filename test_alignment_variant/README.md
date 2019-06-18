@@ -26,9 +26,12 @@ And then index the bam using `samtools index chr22.1mb.bwa.bam`
 2.6.1 for `chr22.1mb.mp2.bam`
 `bcftools mpileup -f ref_hg38_chr22/chr22.fa chr22.1mb.mp2.bam | bcftools call -mv -Ob -o mp2.bcftools.call.bcf` will call variants and save to `mp2.bcftools.call.bcf` in a bcf format. You can view the file using `bcftools view mp2.bcftools.call.bcf | less` or `bcftools view -i '%QUAL>=20' mp2.bcftools.call.bcf | less` to only view those higher quality (>20) variants.
 
+`bcftools view mp2.bcftools.call.bcf > mp2.bcftools.call.vcf` can convert bcf to vcf;
+
 2.6.2 for `chr22.1mb.bwa.bam`
 Simiarly, `bcftools mpileup -f ref_hg38_chr22/chr22.fa chr22.1mb.bwa.bam | bcftools call -mv -Ob -o bwa.bcftools.call.bcf` to call variants and save to `bwa.bcftools.call.bcf`. You can also use `bcf view` to what variants have been called.
 
+`bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf` can convert bcf to vcf for further analysis.
 
 3. Alignment and variant calling based on long reads
 3.1 `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
