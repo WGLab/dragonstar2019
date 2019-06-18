@@ -28,6 +28,7 @@ As you can see, a few genes are prioritized as the disease candidate genes, each
 
 The clinical presentation of a patient is described below. Please make a possible diagnosis of the disease, using the Phenomizer tool (http://compbio.charite.de/phenomizer/). 
 
+![HPO terms](case_hpo.png "Logo Title Text 1")
 
 
 
