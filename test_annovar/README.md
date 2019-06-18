@@ -32,7 +32,7 @@ table_annovar.pl ~/project/alignment/mp2.bcftools.call.vcf /shared/tools/annovar
 
 5. Examine the results in the output `mp2.hg19_multianno.txt` file.
 
-6. Once we finish the phenolyzer exercise, we will analyze a real exome sequencing data in the anemia.vcf file. This is generated on a patient diagnosed with hemolytic anemia.
+6. Once we finish the phenolyzer exercise, we will analyze a real exome sequencing data in the anemia.vcf file. This is generated on a patient diagnosed with hemolytic anemia. See the `test_exome` for more details on the exercise.
 
 
 
