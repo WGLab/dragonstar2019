@@ -1,28 +1,35 @@
 1. go to your home folder, and `mkdir -p project/phenotype/` folder
 
-2. Our initial exercise will focus on an example included in the ANNOVAR package. 
-
-Do `cd ~/project/annotation/`, and then `mkdir ex2` and `cd ex2`
-
-3. We will first annotate a small VCF file to see how the procedure works:
+2. Our initial exercise will focus on using the Phenolyzer software for gene prioritization:
 
 ```
-table_annovar.pl /shared/tools/annovar/example/ex2.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out myanno -remove -protocol refGene,cytoBand,exac03,avsnp147,dbnsfp30a -operation g,r,f,f,f -nastring . -vcfinput
+disease_annotation.pl alzheimer -p -ph -logistic -out ex1
 ```
 
-The command takes the ex2.vcf file, and then a series of annotation tasks on the VCF file. Each annotation task corresponds to one protocol and one operation (such as g, r, and f). The g, r and f represent gene-based, region-based and filter-based annotation, respectively, and the different protocol names represent different databases to use for the annotation. The final output is written to myanno.hg19_multianno.txt file, as well as myanno.hg19_multianno.vcf.
-
-we can take a look at the myanno.hg19_multianno.txt file: it is a tab-delimited file, with the first line being the header line. We can open the file in a software such as Excel to examine it in more details.
-
-4. Next, we will try to annotate the VCF file generated from the alignment/variant exercise described previously. We want to find the refGene, cytoBand, dbNFSP scores for non-synonymous SNPs, and the allele frequency in different ethnicity groups as recorded in the gnomAD database. The command line is below:
+The input in this case is `alzheimer`, and the output are written to a few files. The file that we are interested in is `ex1.final_gene_list`. We can check the first 10 lines of the file:
 
 ```
-table_annovar.pl ~/project/alignment/mp2.bcftools.call.bcf /shared/tools/annovar/humandb/ -buildver hg19 -out mp2 -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation g,r,f,f -nastring . -vcfinput
+[biouser@ecs-3e58 test_phenolyzer]$ head ex1.final_gene_list
+Rank    Gene    ID      Score   Status
+1       PSEN2   5664    1       SeedGene
+2       APP     351     0.9799  SeedGene
+3       PSEN1   5663    0.956   SeedGene
+4       APOE    348     0.414   SeedGene
+5       GATA1   2623    0.3217  SeedGene
+6       PRNP    5621    0.3088  SeedGene
+7       CACNA1G 8913    0.3053  SeedGene
+8       CASP3   836     0.2479  Predicted
+9       SORL1   6653    0.2223  SeedGene
 ```
 
-5. Examine the results in the output mp2.hg19_multianno.txt file.
+As you can see, a few genes are prioritized as the disease candidate genes, each with a Phenolyzer score.
 
-6. Once we finish the phenolyzer exercise, we will analyze a real exome sequencing data in the anemia.vcf file. This is generated on a patient diagnosed with hemolytic anemia.
+3. We will next evaluate a tool called Phenomizer that uses HPO terms to predict possible diseases and genes.
+
+The clinical presentation of a patient is described below. Please make a possible diagnosis of the disease, using the Phenomizer tool (http://compbio.charite.de/phenomizer/). 
+
+
+
 
 
 
