@@ -33,7 +33,7 @@ The results of the assembly can be found in the files
 ## long read assembly
 The long-read data was sequenced for lambda, and the data is in `/shared/data/lambda_100x/lambda_100x.fastq`. In this tutorial, two tools can be used to conduct long read sequence assembly.
 
-### Canu.
+### Canu
 
 First, we create a separate directory to store results.
 
@@ -69,6 +69,13 @@ samtools view lambda_wtdbg2.ctg.map.srt.bam | /shared/tools/wtdbg2/wtpoa-cns -t 
 ```
 
 Finally, the result sequence can be found in `lambda_wtdbg2.ctg.slf.fa`, and the polished sequence can be found in `lambda_wtdbg2.ctg.lrp.fa`.
+
+
+### evaluation of assembly results
+
+We next evaluate the results of the assembly. For both canu and wtdbg, only one contig is generated from the assembly of 100X data, unlike short-read assembly where hundreds of contigs are generated. The reference genome is ~48kb, so we compare the assembly with the reference genome first to evaluate completeness and accuracy.
+
+
 
 
 To do other tutorial, you need to run `conda deactivate` to go back to the base environment.
