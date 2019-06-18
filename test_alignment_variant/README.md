@@ -30,20 +30,20 @@ Simiarly, `bcftools mpileup -f ref_hg38_chr22/chr22.fa chr22.1mb.bwa.bam | bcfto
 `bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf` can convert bcf to vcf for further analysis.
 
 3. Alignment and variant calling based on long reads
-3.1 `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
-2.2 Link data by `ln -s /shared/data/NA12878_nanopore data`
-2.3 Link reference genome by `ln -s /shared/data/ref_human/chroms ref_hg38_chr22`
-2.4 Map short reads to a reference genome. 
-```
-minimap2 -ax map-ont ref_hg38_chr22/chr22.fa  data/chr22.1mb.fq | samtools sort | samtools view -bS - > chr22.1mb.bam
-samtools index chr22.1mb.bam
-```
-The commands above will align long reads in `data/chr22.1mb.fq`, and then sort/save alignment into a bam file `index chr22.1mb.bam`. An index is also created so that you can use `samtools view` or `samtools tview` to view the alignment in the bam file.
+    * 3.1 `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
+    * 3.2 Link data by `ln -s /shared/data/NA12878_nanopore data`
+    * 3.3 Link reference genome by `ln -s /shared/data/ref_human/chroms ref_hg38_chr22`
+    * 3.4 Map short reads to a reference genome. 
+      ```
+      minimap2 -ax map-ont ref_hg38_chr22/chr22.fa  data/chr22.1mb.fq | samtools sort | samtools view -bS - > chr22.1mb.bam
+      samtools index chr22.1mb.bam
+      ```
+      The commands above will align long reads in `data/chr22.1mb.fq`, and then sort/save alignment into a bam file `index chr22.1mb.bam`. An index is also created so that you can use `samtools view` or `samtools tview` to view the alignment in the bam file.
 
-2.5 A simple tool `longshot` can be used to call variants from long-reads aligned bam file. To use this tool, you need to `conda activate longshot` to activate the virtual environment.
-Then, `longshot --bam chr22.1mb.bam --ref ref_hg38_chr22/chr22.fa --out mp2.longshot.vcf` will generate called variants and save in `mp2.longshot.vcf` in a vcf format. 
+    * 3.5 A simple tool `longshot` can be used to call variants from long-reads aligned bam file. To use this tool, you need to `conda activate longshot` to activate the virtual environment.
+   Then, `longshot --bam chr22.1mb.bam --ref ref_hg38_chr22/chr22.fa --out mp2.longshot.vcf` will generate called variants and save in `mp2.longshot.vcf` in a vcf format. 
 
-VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is inside this file.
+   VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is inside this file.
 
 To do other tutorial, you might need to run `conda deactivate` to go back to the base environment.
 
