@@ -24,11 +24,52 @@ Rank    Gene    ID      Score   Status
 
 As you can see, a few genes are prioritized as the disease candidate genes, each with a Phenolyzer score.
 
+Usually multiple phenotype terms are available, and you can separate them in command line:
+
+```
+disease_annotation.pl "alzheimer;brain" -p -ph -logistic -out ex2
+```
+
+Alternatively, save a few phenotype terms in a file, and then supply this file in command line:
+
+```
+disease_annotation.pl /shared/tools/phenolyzer/example_phenotype.txt -f -p -ph -logistic -out ex3
+```
+
+Sometimes, if you know the disease name already and do not want to do "phenotype expansion" step, you can omit the `-ph` argument:
+
+```
+perl disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -f -p -logistic -out ex4
+```
+
+Examine the output files from the above commands.
+
+
+
+
 3. We will next evaluate a tool called Phenomizer that uses HPO terms to predict possible diseases and genes.
 
-The clinical presentation of a patient is described below. Please make a possible diagnosis of the disease, using the Phenomizer tool (http://compbio.charite.de/phenomizer/). 
+The clinical presentation of a patient is described below. Please make a possible diagnosis of the disease, using the Phenomizer tool (http://compbio.charite.de/phenomizer/). The procedure will be described in class as a demo, and students will try to reproduce the results during the exercise session.
 
 ![HPO terms](case_hpo.png "Logo Title Text 1")
+
+
+4. We will also explore the Phenolyzer web server, and examine some example pages. These pages are described in class.
+
+The web page is below (depending on Internet speed, it may take a while to load the example pages)
+
+http://phenolyzer.wglab.org/example.php
+
+5. Bonus exercise
+
+Many “case reports” will publish clinical phenotypes for patients, usually written in free texts by genetic counselors or medical geneticists. 
+
+Example clinical notes from a paper (http://molecularcasestudies.cshlp.org/content/2/6/a001131.long): "The proband was born to a non-consanguineous couple, who had an unremarkable pregnancy history; however, at birth a large fontanel was reported. Parents and siblings were healthy and no significant family history was reported (Figure 1). The proband met all developmental milestones, except crawling, up to his first epileptic episode, which occurred at three years of age. After this episode, he lost all speech, began exhibiting autistic behavior, and also started to have frequent generalized tonic-clonic seizures. Over time, tonic, atonic, mild clonic, complex partial, myoclonic and gelastic seizures were reported in the proband. Other developmental skills, including throwing a ball, responding to his name, feeding himself with utensils and self-care skills were lost by 4-years of age. No significant conductive hearing loss, heart abnormalities or delayed bone age were found in the proband at that age. The proband was evaluated (by G.J.L.) at eleven years of age. He presented with several neurological and craniofacial abnormalities including epilepsy, ventriculomegaly, relative macrocephaly, prominent forehead, low hairline, thick eyebrows, wide-set eyes, macrodontia of upper central incisors, and full lips. Hand and foot abnormalities included clinodactyly of the fifth digit, bilateral single transverse palmar creases, brachydactyly and flat feet (Figure 2). He also had a diagnosis of cerebral folate deficiency due to the presence of folate receptor autoantibodies."
+
+A number of tools, such as EHR-Phenolyzer, can convert free texts into HPO terms, and then use these HPO terms for gene prioritization. Some web servers are also developed for this purpose. In this bonus exercise, try to use the web server, available at https://impact2.dbmi.columbia.edu/doc2hpo/, to generate the HPO terms for this patient. Then generate prioritized gene list on this patient using Phenolyzer.
+
+
+
 
 
 
