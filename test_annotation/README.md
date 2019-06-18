@@ -10,9 +10,9 @@ Do `cd ~/project/annotation/`, and then `mkdir ex2` and `cd ex2`
 table_annovar.pl /shared/tools/annovar/example/ex2.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out myanno -remove -protocol refGene,cytoBand,exac03,avsnp147,dbnsfp35a -operation g,r,f,f,f -nastring . -vcfinput -polish
 ```
 
-The command takes the ex2.vcf file, and then a series of annotation tasks on the VCF file. Each annotation task corresponds to one protocol and one operation (such as g, r, and f). The g, r and f represent gene-based, region-based and filter-based annotation, respectively, and the different protocol names represent different databases to use for the annotation. The final output is written to myanno.hg19_multianno.txt file, as well as myanno.hg19_multianno.vcf.
+The command takes the `ex2.vcf` file, and then a series of annotation tasks on the VCF file. Each annotation task corresponds to one protocol and one operation (such as `g`, `r`, and `f`). The `g`, `r` and `f` represent gene-based, region-based and filter-based annotation, respectively, and the different protocol names represent different databases to use for the annotation. The final output is written to `myanno.hg19_multianno.txt` file, as well as `myanno.hg19_multianno.vcf`.
 
-we can take a look at the myanno.hg19_multianno.txt file: it is a tab-delimited file, with the first line being the header line. We can open the file in a software such as Excel to examine it in more details.
+we can take a look at the `myanno.hg19_multianno.txt` file: it is a tab-delimited file, with the first line being the header line. We can open the file in a software such as Excel to examine it in more details.
 
 4. Next, we will try to annotate the VCF file generated from the alignment/variant exercise described previously. We want to find the refGene, cytoBand, dbNFSP scores for non-synonymous SNPs, and the allele frequency in different ethnicity groups as recorded in the gnomAD database. 
 
