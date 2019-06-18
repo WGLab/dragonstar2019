@@ -14,20 +14,20 @@ The command takes the `ex2.vcf` file, and then a series of annotation tasks on t
 
 we can take a look at the `myanno.hg19_multianno.txt` file: it is a tab-delimited file, with the first line being the header line. We can open the file in a software such as Excel to examine it in more details.
 
-4. Next, we will try to annotate the VCF file generated from the alignment/variant exercise described previously. We want to find the refGene, cytoBand, dbNFSP scores for non-synonymous SNPs, and the allele frequency in different ethnicity groups as recorded in the gnomAD database. 
+4. Next, we will try to annotate the VCF file generated from the exercise described previously. We want to find the refGene, cytoBand, dbNFSP scores for non-synonymous SNPs, and the allele frequency in different ethnicity groups as recorded in the gnomAD database. We will only use the exome subset of the gnomAD data, since the genome subset of gnomAD is too large to be used in this exercise.
 
 We first go up one directory:
 
 ```
 cd ..
-mkdir mp2
-cd mp2
+mkdir ex3
+cd ex3
 ```
 
 Then perform the annotation. The command line is below:
 
 ```
-table_annovar.pl ~/project/alignment/short-reads/mp2.bcftools.call.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out mp2 -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation gx,r,f,f -nastring . -vcfinput -polish -xref /shared/tools/annovar/example/gene_xref.txt
+table_annovar.pl /shared/data/VCF/1000G_PKLR.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out pklr -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation gx,r,f,f -nastring . -vcfinput -polish -xref /shared/tools/annovar/example/gene_xref.txt
 ```
 
 The `-operation` argument tells ANNOVAR which operations to use for each of the protocols: `g` means gene-based, `gx` means gene-based with cross-reference annotation (from `-xref` argument), `r` means region-based and `f` means filter-based. 
@@ -46,7 +46,7 @@ A1BG    9.0649236354772e-05     0.786086131023045       0.2138232197406 alpha-1-
 
 The header line starts with #. The cross-reference file then contains 15 types of annotations for genes.
 
-5. Examine the results in the output `mp2.hg19_multianno.txt` file.
+5. Examine the results in the output `pklr.hg19_multianno.txt` file.
 
 6. Once we finish the `test_phenotype` exercise, we will analyze a real exome sequencing data in the `anemia.vcf` file (this is generated on a patient diagnosed with hemolytic anemia). See the `test_exome` for more details on the exercise.
 
