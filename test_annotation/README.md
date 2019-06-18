@@ -27,7 +27,7 @@ cd mp2
 Then perform the annotation. The command line is below:
 
 ```
-table_annovar.pl ~/project/alignment/mp2.bcftools.call.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out mp2 -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation gx,r,f,f -nastring . -vcfinput -polish -xref /shared/tools/annovar/example/gene_xref.txt
+table_annovar.pl ~/project/alignment/short-reads/mp2.bcftools.call.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out mp2 -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation gx,r,f,f -nastring . -vcfinput -polish -xref /shared/tools/annovar/example/gene_xref.txt
 ```
 
 The `-operation` argument tells ANNOVAR which operations to use for each of the protocols: `g` means gene-based, `gx` means gene-based with cross-reference annotation (from `-xref` argument), `r` means region-based and `f` means filter-based. 
