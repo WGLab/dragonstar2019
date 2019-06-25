@@ -1,5 +1,5 @@
 
-
+## Before tutorial
 We have prepared some tools in the conda environment. To use the genome assembly tools in the exercise, you need to run 
 
 ```
@@ -77,6 +77,8 @@ We next evaluate the results of the assembly. For both canu and wtdbg, only one 
 
 
 
+## After tutorial
 
-To do other tutorial, you need to run `conda deactivate` to go back to the base environment.
+To do other tutorial, you need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
+
 
