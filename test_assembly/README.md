@@ -38,7 +38,8 @@ The long-read data was sequenced for lambda, and the data is in `/shared/data/la
 ### 2.1 Canu
 #### 2.1.1 Preparation of folders and data
 First, we create an assembly folder to store results.
-```mkdir -p ~/project/assembly/long-reads-lambda/canu
+```
+mkdir -p ~/project/assembly/long-reads-lambda/canu
 ```
 Then enter the directory: `cd ~/project/assembly/long-reads-lambda/canu`
 
