@@ -14,14 +14,14 @@
 #### 1.2 Short reads alignment
 In this tutorial, the reads are from a 1MB region in chr22. There are two ways to do the alignment.
 
-##### 1.2.1. Alignment with minimap2. 
+##### 1.2.1 Alignment with minimap2. 
 ```
 minimap2 -ax sr ref_hg38_chr22/chr22.fa data/chr22.1mb_1.fq data/chr22.1mb_2.fq | samtools sort | samtools view -bS - > chr22.1mb.mp2.bam
 ```
 Reads will be aligned with chr22, and then sorted and saved into a bam file.
 After that, `samtools index chr22.1mb.mp2.bam` is used to build index, and `*.bai` will created for the bam file.
 
-##### 1.2.2. Alignment with bwa-mem. 
+##### 1.2.2 Alignment with bwa-mem. 
 ```
 bwa mem ref_hg38_chr22/chr22.fa data/chr22.1mb_1.fq data/chr22.1mb_2.fq | samtools sort | samtools view -bS - > chr22.1mb.bwa.bam
 ```
