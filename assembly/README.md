@@ -30,7 +30,7 @@ The results of the assembly can be found in the files
 
 `lambda_vel/contigs.fa`: contig file
 
-In this file, one can see many contig in this file
+In this file, one can see 17 contig in this file
 
 ## 2. Long read assembly
 The long-read data was sequenced for lambda, and the data is in `/shared/data/lambda_100x/lambda_100x.fastq`. In this tutorial, two tools can be used to conduct long read sequence assembly.
