@@ -10,25 +10,25 @@ We have prepared some tools in the conda environment. To use the genome assembly
 
 
 ## 1. Short read assembly
-The short-read data is from 1Mb region in chr22, and the tool in this tutorial is `velvet`.
+The short-read data is from simulated short-reads for lambda, and the tool in this tutorial is `velvet`.
 
 ### 1.1 Preparation of folders and data
 1. `mkdir -p ~/project/assembly/short-reads` to prepare a folder the assembly.
 2. `cd ~/project/assembly/short-reads` to go to the assembly folder
-3. `ln -s /shared/data/NA12878_short_30X data` to link data folder
+3. `ln -s /shared/data/lambda_short data` to link data folder
 
 ### 1.2 Running `velvet`
 Then we run `velvet`, a short read assembler using the de bruijn graph described in class.
 
 ```
-velveth chr22_vel 31 -short -separate -fastq data/chr22.1mb_1.fq data/chr22.1mb_2.fq
-velvetg chr22_vel
+velveth lambda_vel 31 -short -separate -fastq data/art.lambda.cov1001.fq data/art.lambda.cov1002.fq
+velvetg lambda_vel
 ```
 
 #### 1.3 Assembly results
 The results of the assembly can be found in the files 
 
-`chr22_vel/contigs.fa`: contig file
+`lambda_vel/contigs.fa`: contig file
 
 In this file, one can see many contig in this file
 
@@ -77,7 +77,7 @@ to derive consensus.
 #### 2.2.3 Polishing
 Additionally, the assembled sequence can be polished using the commands below
 ```
-minimap2 -t 2 -ax map-ont lambda_wtdbg2.ctg.slf.fa reads.fa.gz | samtools sort -@2 >lambda_wtdbg2.ctg.map.srt.bam
+minimap2 -t 2 -ax map-ont lambda_wtdbg2.ctg.slf.fa /shared/data/lambda_100x/lambda_100x.fastq | samtools sort -@2 >lambda_wtdbg2.ctg.map.srt.bam
 samtools view lambda_wtdbg2.ctg.map.srt.bam | /shared/tools/wtdbg2/wtpoa-cns -t 2 -d lambda_wtdbg2.ctg.slf.fa -i - -fo lambda_wtdbg2.ctg.lrp.fa
 ```
 
