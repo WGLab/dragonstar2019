@@ -114,5 +114,5 @@ VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is
 
 ## After the tutorial
 
-To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects.
+To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
 
