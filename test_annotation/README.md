@@ -1,4 +1,4 @@
-1. go to your home folder, and `mkdir -p project/annotation/` folder
+1. go to your home folder, and `mkdir -p ~/project/annotation/` folder
 
 2. Our initial exercise will focus on an example included in the ANNOVAR package. 
 
