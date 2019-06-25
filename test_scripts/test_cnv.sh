@@ -1,6 +1,6 @@
-mkdir -p ~/project/penncnv
+mkdir -p ~/project/cnv
 
-cd ~/project/penncnv
+cd ~/project/cnv
 
 
 ln -s /shared/tools/PennCNV/example/example.hmm

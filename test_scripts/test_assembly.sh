@@ -16,7 +16,7 @@ cd ~/project/assembly/long-reads-lambda/wtdbg2
 /shared/tools/wtdbg2/wtdbg2 -x ont -g 50k -i /shared/data/lambda_100x/lambda_100x.fastq -t 2 -fo lambda_wtdbg2
 /shared/tools/wtdbg2/wtpoa-cns -t 2 -i lambda_wtdbg2.ctg.lay.gz -fo lambda_wtdbg2.ctg.slf.fa
 
-minimap2 -t 2 -ax map-ont lambda_wtdbg2.ctg.slf.fa reads.fa.gz | samtools sort -@2 >lambda_wtdbg2.ctg.map.srt.bam
+minimap2 -t 2 -ax map-ont lambda_wtdbg2.ctg.slf.fa /shared/data/lambda_100x/lambda_100x.fastq | samtools sort -@2 >lambda_wtdbg2.ctg.map.srt.bam
 samtools view lambda_wtdbg2.ctg.map.srt.bam | /shared/tools/wtdbg2/wtpoa-cns -t 2 -d lambda_wtdbg2.ctg.slf.fa -i - -fo lambda_wtdbg2.ctg.lrp.fa
 
 conda deactivate
