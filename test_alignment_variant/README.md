@@ -5,45 +5,45 @@
 
 ## The tutorial for read alignment and variants calling
 
-### Short read alignment and variants calling
-#### Preparation of the folder and data
-1 `cd ~/project/alignment/`, and then `mkdir short-reads` and `cd short-reads`
-2 Link data by `ln -s /shared/data/NA12878_short_30X data`
-3 Link reference genome by `ln -s /shared/data/ref_human/chroms ref_hg38_chr22`
+### 1 Short read alignment and variants calling
+#### 1.1 Preparation of the folder and data
+1. `cd ~/project/alignment/`, and then `mkdir short-reads` and `cd short-reads`
+2. Link data by `ln -s /shared/data/NA12878_short_30X data`
+3. Link reference genome by `ln -s /shared/data/ref_human/chroms ref_hg38_chr22`
 
-#### Short reads alignment
+#### 1.2 Short reads alignment
 In this tutorial, the reads are from a 1MB region in chr22. There are two ways to do the alignment.
 
-##### 1. Alignment with minimap2. 
+##### 1.2.1. Alignment with minimap2. 
 ```
 minimap2 -ax sr ref_hg38_chr22/chr22.fa data/chr22.1mb_1.fq data/chr22.1mb_2.fq | samtools sort | samtools view -bS - > chr22.1mb.mp2.bam
 ```
 Reads will be aligned with chr22, and then sorted and saved into a bam file.
 After that, `samtools index chr22.1mb.mp2.bam` is used to build index, and `*.bai` will created for the bam file.
 
-##### 2. Alignment with bwa-mem. 
+##### 1.2.2. Alignment with bwa-mem. 
 ```
 bwa mem ref_hg38_chr22/chr22.fa data/chr22.1mb_1.fq data/chr22.1mb_2.fq | samtools sort | samtools view -bS - > chr22.1mb.bwa.bam
 ```
 And then index the bam using `samtools index chr22.1mb.bwa.bam`
 
-#### View bam files
+#### 1.3 View bam files
 One can see what is bam in two ways.
 
-##### View bam records
+##### 1.3.1 View bam records
 ```
 samtools view chr22.1mb.bwa.bam | less
 ``` 
 to see how to represent alignment for each reads. 
 `type q` to exit.
 
-###### tview bam files
+###### 1.3.2 tview bam files
 ```
 samtools tview -p chr22:25499651 chr22.1mb.bwa.bam ref_hg38_chr22/chr22.fa
 ``` 
 to see how alignments parallel with the reference genome.
 
-#### Variants calling
+#### 1.4 Variants calling
 A simple way for variant calling is to use bcftools. We can generate variant calling for both bam files generatd above.
 
 1. For `chr22.1mb.mp2.bam`. 
@@ -80,13 +80,13 @@ bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
 ``` 
 can be used to convert bcf to vcf for further analysis.
 
-### Long read alignment and variants calling
-#### Preparation of the folder and data
+### 2. Long read alignment and variants calling
+#### 2.1 Preparation of the folder and data
 1. `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
 2. Link data by `ln -s /shared/data/NA12878_nanopore data`
 3. Link reference genome by `ln -s /shared/data/ref_human/chroms ref_hg38_chr22`
 
-#### Long reads alignment
+#### 2.2 Long reads alignment
 ```
       minimap2 -ax map-ont ref_hg38_chr22/chr22.fa  data/chr22.1mb.fq | samtools sort | samtools view -bS - > chr22.1mb.bam
       samtools index chr22.1mb.bam
@@ -94,14 +94,14 @@ can be used to convert bcf to vcf for further analysis.
 The commands above will align long reads in `data/chr22.1mb.fq`, and then sort/save alignment into a bam file `index chr22.1mb.bam`. 
 An index is also created so that you can use `samtools view` or `samtools tview` to view the alignment in the bam file.
 
-#### View bam files
+#### 2.3 View bam files
 One can try one of the commands below to view the bam files.
 ```
 samtools view chr22.1mb.bam | less
 samtools tview -p chr22:25499651 chr22.1mb.bam ref_hg38_chr22/chr22.fa
 ```
 
-#### Variants calling
+#### 2.4 Variants calling
 A simple tool `longshot` can be used to call variants from long-reads aligned bam file. To use this tool, you need to `conda activate longshot` to activate the virtual environment.
 
 Then,
