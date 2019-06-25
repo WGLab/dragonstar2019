@@ -5,7 +5,7 @@
 
 ## The tutorial for read alignment and variants calling
 
-### 1 Short read alignment and variants calling
+### 1. Short read alignment and variants calling
 #### 1.1 Preparation of the folder and data
 1. `cd ~/project/alignment/`, and then `mkdir short-reads` and `cd short-reads`
 2. Link data by `ln -s /shared/data/NA12878_short_30X data`
@@ -88,8 +88,8 @@ can be used to convert bcf to vcf for further analysis.
 
 #### 2.2 Long reads alignment
 ```
-      minimap2 -ax map-ont ref_hg38_chr22/chr22.fa  data/chr22.1mb.fq | samtools sort | samtools view -bS - > chr22.1mb.bam
-      samtools index chr22.1mb.bam
+minimap2 -ax map-ont ref_hg38_chr22/chr22.fa  data/chr22.1mb.fq | samtools sort | samtools view -bS - > chr22.1mb.bam
+samtools index chr22.1mb.bam
 ```
 The commands above will align long reads in `data/chr22.1mb.fq`, and then sort/save alignment into a bam file `index chr22.1mb.bam`. 
 An index is also created so that you can use `samtools view` or `samtools tview` to view the alignment in the bam file.
