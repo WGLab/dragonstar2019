@@ -1,7 +1,8 @@
 mkdir -p ~/project/phenotype
 cd ~/project/phenotype
-disease_annotation.pl alzheimer -p -ph -logistic -out ex1
-disease_annotation.pl "alzheimer;brain" -p -ph -logistic -out ex2
-disease_annotation.pl /shared/tools/phenolyzer/example_phenotype.txt -f -p -ph -logistic -out ex3
-disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -f -p -logistic -out ex4
+disease_annotation.pl alzheimer -prediction -phenotype -logistic -out ex1
+disease_annotation.pl "Amyotrophic lateral sclerosis" -prediction -phenotype -logistic -out ex2
+disease_annotation.pl /shared/tools/phenolyzer/example_phenotype.txt -file -prediction -phenotype -logistic -out ex3
+disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -file -prediction -logistic -out ex4
+disease_annotation.pl /shared/tools/phenolyzer/example_hpo.txt -file -prediction -phenotype -logistic -out ex5
 cd ~/project
