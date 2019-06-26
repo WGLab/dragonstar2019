@@ -3,7 +3,7 @@
 2. Our initial exercise will focus on using the Phenolyzer software for gene prioritization:
 
 ```
-disease_annotation.pl alzheimer -p -ph -logistic -out ex1
+disease_annotation.pl alzheimer -prediction -phenotype -logistic -out ex1
 ```
 
 The input in this case is `alzheimer`, and the output are written to a few files. The file that we are interested in is `ex1.final_gene_list`. We can check the first 10 lines of the file:
@@ -24,22 +24,28 @@ Rank    Gene    ID      Score   Status
 
 As you can see, a few genes are prioritized as the disease candidate genes, each with a Phenolyzer score.
 
-Usually multiple phenotype terms are available, and you can separate them in command line:
+When the disease/phenotype contains space, and we must enclose them by quote in command line:
 
 ```
-disease_annotation.pl "alzheimer;brain" -p -ph -logistic -out ex2
+disease_annotation.pl "Amyotrophic lateral sclerosis" -prediction -phenotype -logistic -out ex2
 ```
 
-Alternatively, save a few phenotype terms in a file, and then supply this file in command line:
+When multiple phenotype terms are available, and you can separate them by ";" in command line. Alternatively, save a few phenotype terms in a file, and then supply this file in command line:
 
 ```
-disease_annotation.pl /shared/tools/phenolyzer/example_phenotype.txt -f -p -ph -logistic -out ex3
+disease_annotation.pl /shared/tools/phenolyzer/example_phenotype.txt -file -prediction -phenotype -logistic -out ex3
 ```
 
 Sometimes, if you know the disease name already and do not want to do "phenotype expansion" step, you can omit the `-ph` argument:
 
 ```
-perl disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -f -p -logistic -out ex4
+perl disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -file -prediction -logistic -out ex4
+```
+
+Phenolyzer can also directly process HPO terms as phenotypes. For example, one patient was seen by a genetic counselor and the list of HPO terms were recorded in a file (one term per line). We want to analyze the file and prioritize candidate genes:
+
+```
+disease_annotation.pl /shared/tools/phenolyzer/example_hpo.txt -f -p -ph -logistic -out ex5 -addon DB_DISGENET_GENE_DISEASE_SCORE,DB_GAD_GENE_DISEASE_SCORE -addon_weight 0.25
 ```
 
 Examine the output files from the above commands.
