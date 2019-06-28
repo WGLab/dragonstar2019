@@ -56,7 +56,8 @@ You can view the file using
 bcftools view mp2.bcftools.call.bcf | less
 ``` 
 or 
-```bcftools view -i '%QUAL>=20' mp2.bcftools.call.bcf | less
+```
+bcftools view -i '%QUAL>=20' mp2.bcftools.call.bcf | less
 ``` 
 to only view those higher quality (>20) variants.
 
