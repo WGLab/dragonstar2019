@@ -85,10 +85,10 @@ bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
 ``` 
 can be used to convert bcf to vcf for further analysis.
 
-#### 1.5 Statistics of variants calling
+#### 1.5 Statistics and evaluation of variants calling
 We next generate statistics of the called variants.
 
-1. For `chr22.1mb.mp2.bam`. 
+##### 1.5.1. For `chr22.1mb.mp2.bam`. 
 ```
 bgzip mp2.bcftools.call.vcf
 bcftools index -f mp2.bcftools.call.vcf.gz
@@ -119,7 +119,32 @@ TSTV    0       762     341     2.23    762     341     2.23
 ```
 where TS is 2.23 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
 
-2. For `chr22.1mb.bwa.bam`
+###### 1.5.1.1 Evaluation of the variant calling
+We next compare the called variants against high-quality variants in a gold-standard set uner the folder of '/shared/data/NA12878_GIAB/chr22.1mb.hg38.na12878.vcf.gz'
+```
+bcftools isec mp2.bcftools.call.vcf.gz /shared/data/NA12878_GIAB/chr22.1mb.hg38.na12878.vcf.gz -p minimap2_perf
+bcftools stats minimap2_perf/0002.vcf | grep "^SN"
+```
+The first command will generate the intersection of called variants and the gold-standard variants, and the second command show the overlap below
+```
+SN      0       number of samples:      1
+SN      0       number of records:      234
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 233
+SN      0       number of MNPs: 0
+SN      0       number of indels:       1
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+```
+It seems that there are 234 called variants which are correct, and there are total 1248 called variants, and thus the precision is 234/1248=0.1875. Using 
+```
+bcftools stats /shared/data/NA12878_GIAB/chr22.1mb.hg38.na12878.vcf.gz | grep "^SN"
+```
+We can know that there are 829 gold-standard variants, and thus, the recall is 234/829=0.28.
+
+
+##### 1.5.2. For `chr22.1mb.bwa.bam`
 ```
 bgzip bwa.bcftools.call.vcf
 bcftools index -f bwa.bcftools.call.vcf.gz
@@ -149,6 +174,27 @@ will give the statistics below:
 TSTV    0       847     402     2.11    847     402     2.11
 ```
 where TS is 2.11 times compared with TV.
+
+###### 1.5.2.1 Evaluation of the variant calling
+This called variants is also compared against the gold-standard variants, and precision and recall will be calculated.
+``
+bcftools isec bwa.bcftools.call.vcf.gz /shared/data/NA12878_GIAB/chr22.1mb.hg38.na12878.vcf.gz -p bwa_perf
+bcftools stats bwa_perf/0002.vcf | grep "^SN"
+``
+Similarly, we get
+```
+SN      0       number of samples:      1
+SN      0       number of records:      362
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 360
+SN      0       number of MNPs: 0
+SN      0       number of indels:       2
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+```
+The precision is 362/1415=0.256, and the recall is 362/829=0.437. Compared with the variants called with `minimap2`, it seems that on short reads, `bwa` gives better performance.
+
 
 #### 1.6 Comparison of two called variants.
 We next to see how the variants overlap between the two called variants by the two tools.
