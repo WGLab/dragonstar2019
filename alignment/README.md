@@ -81,6 +81,103 @@ bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
 ``` 
 can be used to convert bcf to vcf for further analysis.
 
+#### 1.5 Statistics of variants calling
+We next generate statistics of the called variants.
+
+1. For `chr22.1mb.mp2.bam`. 
+```
+bgzip mp2.bcftools.call.vcf
+bcftools index -f mp2.bcftools.call.vcf.gz
+bcftools stats mp2.bcftools.call.vcf.gz | grep "^SN"
+```
+will generate the statistics below
+```
+SN      0       number of samples:      1
+SN      0       number of records:      1248
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 1103
+SN      0       number of MNPs: 0
+SN      0       number of indels:       145
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+```
+where there are 1103 snps and 145 indels among 1 millions bp region. The indels are less than 14 percentage of snps. 
+
+```
+bcftools stats mp2.bcftools.call.vcf.gz | grep "TSTV"
+```
+will give the statistics below:
+```
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       762     341     2.23    762     341     2.23
+```
+where TS is 2.23 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
+
+2. For `chr22.1mb.bwa.bam`
+```
+bgzip bwa.bcftools.call.vcf
+bcftools index -f bwa.bcftools.call.vcf.gz
+bcftools stats bwa.bcftools.call.vcf.gz | grep "^SN"
+```
+will generate the statistics below
+```
+SN      0       number of samples:      1
+SN      0       number of records:      1415
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 1249
+SN      0       number of MNPs: 0
+SN      0       number of indels:       166
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   2
+SN      0       number of multiallelic SNP sites:       0
+```
+where there are 1249 snps and 166 indels among 1 millions bp region. The indels are less than 15 percentage of snps. 
+
+```
+bcftools stats bwa.bcftools.call.vcf.gz | grep "TSTV"
+```
+will give the statistics below:
+```
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       847     402     2.11    847     402     2.11
+```
+where TS is 2.11 times compared with TV.
+
+#### 1.6 Comparison of two called variants.
+We next to see how the variants overlap between the two called variants by the two tools.
+```
+bcftools isec mp2.bcftools.call.vcf.gz bwa.bcftools.call.vcf.gz -p twoshort_comparison
+```
+And you have a new folder called `twoshort_comparison` with the files below
+```
+twoshort_comparison/0000.vcf    for records private to  mp2.bcftools.call.vcf.gz
+twoshort_comparison/0001.vcf    for records private to  bwa.bcftools.call.vcf.gz
+twoshort_comparison/0002.vcf    for records from mp2.bcftools.call.vcf.gz shared by both        mp2.bcftools.call.vcf.gz bwa.bcftools.call.vcf.gz
+twoshort_comparison/0003.vcf    for records from bwa.bcftools.call.vcf.gz shared by both        mp2.bcftools.call.vcf.gz bwa.bcftools.call.vcf.gz
+```
+
+We thus investigate `twoshort_comparison/0002.vcf` to see the intersected variants.
+```
+bcftools stats twoshort_comparison/0002.vcf | grep "^SN"
+```
+and you will have 
+```
+SN      0       number of samples:      1
+SN      0       number of records:      901
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 791
+SN      0       number of MNPs: 0
+SN      0       number of indels:       110
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+```
+Where you can see that about 30% variants are different between the two sets of called variants.
+
+
 ### 2. Long read alignment and variants calling
 #### 2.1 Preparation of the folder and data
 1. `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
@@ -113,7 +210,64 @@ will generate called variants and save in `mp2.longshot.vcf` in a vcf format.
 
 VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is inside this file.
 
+#### 2.5 Statistics of called variants
+We also want to see how many snps and indels are in the vcf files. To do that please run `conda deactivate` first.
+```
+bgzip mp2.longshot.vcf
+bcftools index -f mp2.longshot.vcf.gz
+bcftools stats mp2.longshot.vcf.gz | grep "^SN"
+```
+will tell you 
+```
+SN      0       number of samples:      1
+SN      0       number of records:      2280
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 2280
+SN      0       number of MNPs: 0
+SN      0       number of indels:       0
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+```
+Where there are 2280 snps and no indels found. 
+
+```
+bcftools stats mp2.longshot.vcf.gz | grep "TSTV"
+```
+will tell that 
+```
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       1748    532     3.29    1748    532     3.29
+```
+Where TS is more than 3 times than TV.
+
+#### 2.6 Comparison of variants called from short-reads and variants called from long reads
+Since there is a big difference in called variants from long reads compared with variants called from short reads, we will also investigate the insection between the variants called from short reads and long reads using the command below:
+```
+bcftools isec ../short-reads/mp2.bcftools.call.vcf.gz mp2.longshot.vcf.gz -p shortlong_comparison
+```
+
+Then, we check the overlapped variants using
+```
+bcftools stats shortlong_comparison/0002.vcf | grep "^SN"
+```
+where you can see 
+```
+SN      0       number of samples:      1
+SN      0       number of records:      492
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 492
+SN      0       number of MNPs: 0
+SN      0       number of indels:       0
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
+```
+There are much less intersected variants called from short reads and long reads. In this example, no indels and more snps (>10% of 1 millions bp region) are called, but the overlapped snps are less than 500. Maybe, more complicated variant calling tools would be used, such as `deepvariant` developed by google. One can try `deepvariant` by himself.
+
+
 ## After the tutorial
 
-To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
+To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects if you do not practice `2.5`. ***If you still have issues to run other projects, please re-login.***
 
