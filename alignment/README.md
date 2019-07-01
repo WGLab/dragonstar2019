@@ -1,6 +1,10 @@
 ## Before the tutorial
 
-1. To use installed softwares, you need to run `. /shared/miniconda3/etc/profile.d/conda.sh` and then `conda activate base`.
+1. To use installed softwares, you need to run 
+```
+. /shared/miniconda3/etc/profile.d/conda.sh
+conda activate base
+```
 2. go to your home folder, and `mkdir -p ~/project/alignment/` folder to create an alignment folder
 
 ## The tutorial for read alignment and variants calling
