@@ -175,7 +175,7 @@ SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-Where you can see that about 30% variants are different between the two sets of called variants.
+Where you can see that about 30% variants are different between the two sets of called variants. But one can try to use quality filer `-i '%QUAL>=20'` to investigate high-quality varriants only to see whether higher overlapping percentage can be obtained.
 
 
 ### 2. Long read alignment and variants calling
@@ -213,6 +213,7 @@ VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is
 #### 2.5 Statistics of called variants
 We also want to see how many snps and indels are in the vcf files. To do that please run `conda deactivate` first.
 ```
+conda deactivate
 bgzip mp2.longshot.vcf
 bcftools index -f mp2.longshot.vcf.gz
 bcftools stats mp2.longshot.vcf.gz | grep "^SN"
