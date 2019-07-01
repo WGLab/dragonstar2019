@@ -266,9 +266,20 @@ We also want to see how many snps and indels are in the vcf files. To do that pl
 conda deactivate
 bgzip mp2.longshot.vcf
 bcftools index -f mp2.longshot.vcf.gz
-bcftools stats mp2.longshot.vcf.gz | grep "^SN"
+bcftools stats mp2.longshot.vcf.gz | grep "TSTV"
 ```
 will tell you 
+```
+# TSTV, transitions/transversions:
+# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
+TSTV    0       1748    532     3.29    1748    532     3.29
+```
+Where TS is more than 3 times than TV.
+
+```
+bcftools stats mp2.longshot.vcf.gz | grep "^SN"
+```
+will tell that 
 ```
 SN      0       number of samples:      1
 SN      0       number of records:      2280
@@ -282,16 +293,26 @@ SN      0       number of multiallelic SNP sites:       0
 ```
 Where there are 2280 snps and no indels found. 
 
+#### 2.5.1. Evaluation of called variants.
+We also validate the called variants with the gold-standard variants. 
 ```
-bcftools stats mp2.longshot.vcf.gz | grep "TSTV"
+bcftools isec mp2.longshot.vcf.gz /shared/data/NA12878_GIAB/chr22.1mb.hg38.na12878.vcf.gz -p longshot_perf
+bcftools stats longshot_perf/0002.vcf | grep "^SN"
 ```
-will tell that 
+And then, we can know that 
 ```
-# TSTV, transitions/transversions:
-# TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
-TSTV    0       1748    532     3.29    1748    532     3.29
+SN      0       number of samples:      1
+SN      0       number of records:      630
+SN      0       number of no-ALTs:      0
+SN      0       number of SNPs: 630
+SN      0       number of MNPs: 0
+SN      0       number of indels:       0
+SN      0       number of others:       0
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
 ```
-Where TS is more than 3 times than TV.
+This overlapping suggests the recall is 630/829=0.76, but the precision is 630/2280=0.276. 
+
 
 #### 2.6 Comparison of variants called from short-reads and variants called from long reads
 Since there is a big difference in called variants from long reads compared with variants called from short reads, we will also investigate the insection between the variants called from short reads and long reads using the command below:
