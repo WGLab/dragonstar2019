@@ -45,7 +45,7 @@ to see how to represent alignment for each reads.
 
 ###### 1.3.2 tview bam files
 ```
-samtools tview -p chr1:156000000 chr1.2mb.bwa.bam ref/hg37d5.chr1.fa
+samtools tview -p 1:156000000 chr1.2mb.bwa.bam ref/hg37d5.chr1.fa
 ``` 
 to see how alignments parallel with the reference genome.
 
