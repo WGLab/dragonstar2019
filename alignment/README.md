@@ -92,23 +92,23 @@ We next generate statistics of the called variants.
 
 ##### 1.5.1. On bam file aligned with `minimap2`. 
 ```
-bgzip mp2.bcftools.call.vcf
+bgzip -f mp2.bcftools.call.vcf
 bcftools index -f mp2.bcftools.call.vcf.gz
 bcftools stats mp2.bcftools.call.vcf.gz | grep "^SN"
 ```
 will generate the statistics below
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      1248
+SN      0       number of records:      2406
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1103
+SN      0       number of SNPs: 1896
 SN      0       number of MNPs: 0
-SN      0       number of indels:       145
+SN      0       number of indels:       510
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   0
-SN      0       number of multiallelic SNP sites:       0
+SN      0       number of multiallelic sites:   26
+SN      0       number of multiallelic SNP sites:       2
 ```
-where there are 1103 snps and 145 indels among 1 millions bp region. The indels are less than 14 percentage of snps. 
+where there are 1896 snps and 510 indels among 2 millions bp region. 
 
 ```
 bcftools stats mp2.bcftools.call.vcf.gz | grep "TSTV"
@@ -117,9 +117,9 @@ will give the statistics below:
 ```
 # TSTV, transitions/transversions:
 # TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
-TSTV    0       762     341     2.23    762     341     2.23
+TSTV    0       1336    562     2.38    1335    561     2.38
 ```
-where TS is 2.23 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
+where TS is 2.38 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
 
 ###### 1.5.1.1 Evaluation of the variant calling
 We next compare the called variants against high-quality variants in a gold-standard set.
@@ -128,10 +128,10 @@ bcftools isec mp2.bcftools.call.vcf.gz vcf/vcf.chr1.2mb.vcf.gz -p minimap2_perf
 ```
 The first command will generate the intersection of called variants and the gold-standard variants, and you have a new folder called `minimap2_perf` with the files below
 ```
-minimap2_perf/0000.vcf    for records private to  mp2.bcftools.call.vcf.gz
-minimap2_perf/0001.vcf    for records private to  bwa.bcftools.call.vcf.gz
-minimap2_perf/0002.vcf    for records from mp2.bcftools.call.vcf.gz shared by both        mp2.bcftools.call.vcf.gz bwa.bcftools.call.vcf.gz
-minimap2_perf/0003.vcf    for records from bwa.bcftools.call.vcf.gz shared by both        mp2.bcftools.call.vcf.gz bwa.bcftools.call.vcf.gz
+minimap2_perf/0000.vcf  for records private to  mp2.bcftools.call.vcf.gz
+minimap2_perf/0001.vcf  for records private to  vcf/vcf.chr1.2mb.vcf.gz
+minimap2_perf/0002.vcf  for records from mp2.bcftools.call.vcf.gz shared by both        mp2.bcftools.call.vcf.gz vcf/vcf.chr1.2mb.vcf.gz
+minimap2_perf/0003.vcf  for records from vcf/vcf.chr1.2mb.vcf.gz shared by both mp2.bcftools.call.vcf.gz vcf/vcf.chr1.2mb.vcf.gz
 ```
 
 We thus investigate `minimap2_perf/0002.vcf` to see the intersected variants.
@@ -141,20 +141,20 @@ bcftools stats minimap2_perf/0002.vcf | grep "^SN"
 And then,
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      234
+SN      0       number of records:      1565
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 233
+SN      0       number of SNPs: 1546
 SN      0       number of MNPs: 0
-SN      0       number of indels:       1
+SN      0       number of indels:       19
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   0
-SN      0       number of multiallelic SNP sites:       0
+SN      0       number of multiallelic sites:   1
+SN      0       number of multiallelic SNP sites:       1
 ```
-It seems that there are 234 called variants which are correct, and there are total 1248 called variants, and thus the precision is 234/1248=0.1875. Using 
+It seems that there are 1565 called variants which are correct, and there are total 2406 called variants, and thus the precision is 1565/2406=0.65. Using 
 ```
 bcftools stats vcf/vcf.chr1.2mb.vcf.gz | grep "^SN"
 ```
-We can know that there are 829 gold-standard variants, and thus, the recall is 234/829=0.28.
+We can know that there are 1922 gold-standard variants, and thus, the recall is 1565/1922=0.814.
 
 
 ##### 1.5.2. On A bam file aligned with `bwa bam`
@@ -166,16 +166,16 @@ bcftools stats bwa.bcftools.call.vcf.gz | grep "^SN"
 will generate the statistics below
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      1415
+SN      0       number of records:      2499
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1249
+SN      0       number of SNPs: 1980
 SN      0       number of MNPs: 0
-SN      0       number of indels:       166
+SN      0       number of indels:       519
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   2
-SN      0       number of multiallelic SNP sites:       0
+SN      0       number of multiallelic sites:   26
+SN      0       number of multiallelic SNP sites:       2
 ```
-where there are 1249 snps and 166 indels among 1 millions bp region. The indels are less than 15 percentage of snps. 
+where there are 1980 snps and 519 indels among 2 millions bp region. 
 
 ```
 bcftools stats bwa.bcftools.call.vcf.gz | grep "TSTV"
@@ -184,9 +184,9 @@ will give the statistics below:
 ```
 # TSTV, transitions/transversions:
 # TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
-TSTV    0       847     402     2.11    847     402     2.11
+TSTV    0       1401    581     2.41    1400    580     2.41
 ```
-where TS is 2.11 times compared with TV.
+where TS is 2.41 times compared with TV.
 
 ###### 1.5.2.1 Evaluation of the variant calling
 This called variants is also compared against the gold-standard variants, and precision and recall will be calculated.
@@ -197,16 +197,16 @@ bcftools stats bwa_perf/0002.vcf | grep "^SN"
 Similarly, we get
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      362
+SN      0       number of records:      1565
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 360
+SN      0       number of SNPs: 1546
 SN      0       number of MNPs: 0
-SN      0       number of indels:       2
+SN      0       number of indels:       19
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   0
-SN      0       number of multiallelic SNP sites:       0
+SN      0       number of multiallelic sites:   1
+SN      0       number of multiallelic SNP sites:       1
 ```
-The precision is 362/1415=0.256, and the recall is 362/829=0.437. Compared with the variants called with `minimap2`, it seems that on short reads, `bwa` gives better performance.
+The precision is 1565/2499=0.626, and the recall is 1565/1922=0.814. Compared with the variants called with `minimap2`, it seems that on short reads, `minimap2` gives better performance.
 
 
 #### 1.6 Comparison of two called variants.
@@ -219,16 +219,16 @@ bcftools stats twoshort_comparison/0002.vcf | grep "^SN"
 and you will have 
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      901
+SN      0       number of records:      2334
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 791
+SN      0       number of SNPs: 1866
 SN      0       number of MNPs: 0
-SN      0       number of indels:       110
+SN      0       number of indels:       468
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   0
-SN      0       number of multiallelic SNP sites:       0
+SN      0       number of multiallelic sites:   24
+SN      0       number of multiallelic SNP sites:       2
 ```
-Where you can see that about 30% variants are different between the two sets of called variants. But one can try to use quality filer `-i '%QUAL>=20'` to investigate high-quality varriants only to see whether higher overlapping percentage can be obtained.
+Where you can see that less than 5% variants are different between the two sets of called variants. But one can try to use quality filer `-i '%QUAL>=20'` to investigate high-quality varriants only to see whether higher overlapping percentage can be obtained.
 
 
 ### 2. Long read alignment and variants calling
@@ -250,7 +250,7 @@ An index is also created so that you can use `samtools view` or `samtools tview`
 One can try one of the commands below to view the bam files.
 ```
 samtools view chr1.2mb.bam | less
-samtools tview -p chr1:156000000 chr1.2mb.bam ref/hg37d5.chr1.fa
+samtools tview -p 1:156000000 chr1.2mb.bam ref/hg37d5.chr1.fa
 ```
 
 #### 2.4 Variants calling
@@ -267,7 +267,7 @@ VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is
 #### 2.5 Statistics of called variants
 We also want to see how many snps and indels are in the vcf files. To do that please run `conda deactivate` first.
 ```
-bgzip mp2.longshot.vcf
+bgzip -f mp2.longshot.vcf
 bcftools index -f mp2.longshot.vcf.gz
 bcftools stats mp2.longshot.vcf.gz | grep "TSTV"
 ```
@@ -275,7 +275,7 @@ will tell you
 ```
 # TSTV, transitions/transversions:
 # TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
-TSTV    0       1748    532     3.29    1748    532     3.29
+TSTV    0       3122    914     3.42    3122    914     3.42
 ```
 Where TS is more than 3 times than TV.
 
@@ -285,16 +285,16 @@ bcftools stats mp2.longshot.vcf.gz | grep "^SN"
 will tell that 
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      2280
+SN      0       number of records:      4036
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 2280
+SN      0       number of SNPs: 4036
 SN      0       number of MNPs: 0
 SN      0       number of indels:       0
 SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-Where there are 2280 snps and no indels found. 
+Where there are 4036 snps and no indels found. 
 
 #### 2.5.1. Evaluation of called variants.
 We also validate the called variants with the gold-standard variants. 
@@ -305,16 +305,16 @@ bcftools stats longshot_perf/0002.vcf | grep "^SN"
 And then, we can know that 
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      630
+SN      0       number of records:      1270
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 630
+SN      0       number of SNPs: 1270
 SN      0       number of MNPs: 0
 SN      0       number of indels:       0
 SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-This overlapping suggests the recall is 630/829=0.76, but the precision is 630/2280=0.276. 
+This overlapping suggests the recall is 1270/1922=0.66, but the precision is 1270/4036=0.315, which is much worse than the performance generated by short reads. 
 
 
 #### 2.6 Comparison of variants called from short-reads and variants called from long reads
@@ -330,16 +330,16 @@ bcftools stats shortlong_comparison/0002.vcf | grep "^SN"
 where you can see 
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      492
+SN      0       number of records:      1394
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 492
+SN      0       number of SNPs: 1394
 SN      0       number of MNPs: 0
 SN      0       number of indels:       0
 SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-There are much less intersected variants called from short reads and long reads. In this example, no indels and more snps (>10% of 1 millions bp region) are called, but the overlapped snps are less than 500. Maybe, more complicated variant calling tools would be used, such as `deepvariant` developed by google. One can try `deepvariant` by himself.
+There are 1394 intersected variants called from short reads and long reads. Together with the poor performance achieved by longshot, it seems that more complicated variant calling tools would be used, such as `deepvariant` developed by google. One can install and try `deepvariant` by himself.
 
 
 ## After the tutorial
