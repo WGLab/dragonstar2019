@@ -13,7 +13,7 @@ conda activate base
 #### 1.1 Preparation of the folder and data
 1. `cd ~/project/alignment/`, and then `mkdir short-reads` and `cd short-reads`
 2. Link data by `ln -s /shared/data/NA12878_test_data/short-reads data`
-3. Link reference genome by `ln -s /shared/data/ref_hg37_chr1.ref ref`
+3. Link reference genome by `ln -s /shared/data/ref_hg37_chr1/ref ref`
 4. Link high quality variant file by `ln -s /shared/data/ref_hg37_chr1/vcf vcf`
 
 #### 1.2 Short reads alignment
@@ -235,7 +235,7 @@ Where you can see that about 30% variants are different between the two sets of 
 #### 2.1 Preparation of the folder and data
 1. `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
 2. Link data by `ln -s /shared/data/NA12878_test_data/long-reads data`
-3. Link reference genome by `ln -s /shared/data/ref_hg37_chr1.ref ref`
+3. Link reference genome by `ln -s /shared/data/ref_hg37_chr1/ref ref`
 4. Link high quality variant file by `ln -s /shared/data/ref_hg37_chr1/vcf vcf`
 
 #### 2.2 Long reads alignment
