@@ -339,7 +339,7 @@ SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-There are 1394 intersected variants called from short reads and long reads. Together with the poor performance achieved by longshot, it seems that more complicated variant calling tools would be used, such as `deepvariant` developed by google. One can install and try `deepvariant` by himself.
+There are 1394 intersected variants called from short reads and long reads. Together with the poor performance achieved by longshot, it seems that more complicated variant calling tools would be used, such as `deepvariant` developed by google.
 
 
 ## After the tutorial
