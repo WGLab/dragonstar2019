@@ -1,5 +1,5 @@
 
-### Practice for fq and fa files
+### Practice basic commands for fq and fa files
 
 How many reads in a fq.
 ```
@@ -59,7 +59,7 @@ cat data/sr.chr1.2mb_1.fq | paste - - | awk '{if (length($2)>65) print $1"\n"$2}
 ```
 
 
-### Practice for bam/sam files
+### Practice basic commands for bam/sam files
 
 Get basic statistics from a bam
 ```
