@@ -79,7 +79,7 @@ samtools view data/chr1.2mb.mp2.bam | cut -f 2 | sort | uniq -c
 Check those alignment whose mapping quality > 30.
 ```
 samtools view data/chr1.2mb.mp2.bam | awk '{if ($5>30) print $0}' | less
-``
+```
 
 Check the read alignment distribution according to chromosomes.
 ```
