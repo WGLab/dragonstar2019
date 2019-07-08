@@ -9,7 +9,9 @@ conda activate base
 You will see that your command line prompt is now changed to something that look like `(base) [biouser@test-0010 ]$ `. This indicates that you are already in the base environment in conda, and we can proceed with the exercise.
 
 2. Prepare folders
+
 2.1 Go to your home folder (you can type `cd` to automatically go to your home folder, and `mkdir -p ~/project/startup/` folder, and then `cd ~/project/startup/`. All our tests will be done in this directory.
+
 2.2 `ln -s /shared/data/practice_data data` to link the fq, bam and vcf files for practice.
 
 ### Practice basic commands for fq and fa files
