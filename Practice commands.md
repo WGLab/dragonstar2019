@@ -126,6 +126,7 @@ bcftools view -v snps data/mp2.bcftools.call.bcf | grep "^[^#]" | cut -d "=" -f 
 Get averaged coverage for indels
 ```
 bcftools view -v indels data/mp2.bcftools.call.bcf | grep "^[^#]" | cut -d "=" -f 2| cut -d ";" -f 1 | awk '{total+=$1} END {print total/NR}' | less
+```
 
 Get snps and indels whose coverage > 30
 ```
