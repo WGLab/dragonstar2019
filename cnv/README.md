@@ -86,22 +86,19 @@ We can use Delly (https://github.com/dellytools/delly) to call SVs from short-re
 
 1. Create a folder for this project, using the `mkdir -p ~/project/short_reads_sv/` command. Do `~/project/short_reads_sv/` to enter the directory.
 
-2. Our initial exercise will focus on two example bam files which covers a 2 Mbp region in the human genome. 
-The bam files are here: 
+2. We will use the bam files generated in the alignment training section as input. You should alreadly have the following files if you have completed the alignment section.
 
 ```
-/shared/data/NA12878_test_data/short-reads/chr1.2mb.bwa.bam # aligner: BWA-MEM
-/shared/data/NA12878_test_data/short-reads/chr1.2mb.mp2.bam # aligner: Minimap2
+/home/biouser/project/alignment/short-reads/chr1.2mb.bwa.bam # aligner: BWA-MEM
+/home/biouser/project/alignment/short-reads/chr1.2mb.mp2.bam # aligner: Minimap2
 ```
-*WARNING: the two bam fils are not in this folder right now.*
 
 You can use the following commands to run Delly: 
 
 ```
-delly call -g hg37d5.chr1.fa -o chr1.2mb.bwa.bam.delly.bcf chr1.2mb.bwa.bam
-delly call -g hg37d5.chr1.fa -o chr1.2mb.mp2.bam.delly.bcf chr1.2mb.mp2.bam
+delly call -g /shared/data/ref_hg37_chr1/ref/hg37d5.chr1.fa -o chr1.2mb.bwa.bam.delly.bcf /home/biouser/project/alignment/short-reads/chr1.2mb.bwa.bam
+delly call -g /shared/data/ref_hg37_chr1/ref/hg37d5.chr1.fa -o chr1.2mb.mp2.bam.delly.bcf /home/biouser/project/alignment/short-reads/chr1.2mb.mp2.bam
 ```
-*WARNING: paths to the reference fasta file and the bam files need to be updated
 
 In the above commands, `-g` specifies the reference fasta file and `-o` specifies the output BCF file. BCF is the binary version of VCF.
 
@@ -138,7 +135,7 @@ chr1.2mb.mp2.bam.delly.vcf:1	156526704	DEL00000110	T	<DEL>	.	PASS	PRECISE;SVTYPE
 ```
 
 One call was found in each vcf file.
-In the first line, `1	156526704` indicates that the first breakpoint is at chr1: 156526704; `CHR2=1;END=156528936` indicates that the second breakpoint is at chr1:156528936. 
+In the first line, `1  156526704` indicates that the first breakpoint is at chr1:156526704; `CHR2=1;END=156528936` indicates that the second breakpoint is at chr1:156528936. 
 
 In the second line, `1	156526704` indicates that the first breakpoint is at chr1:156526704; `CHR2=1;END=156528936`indicates that the second breakpoint is at chr1:156528936. 
 
