@@ -1,3 +1,5 @@
+## Detection of copy number variants from DNA microarrays
+
 1. Creaet a folder for this project, using the `mkdir -p ~/project/penncnv/` command.
 
 2. Our initial exercise will focus on examples included in the PennCNV package. 
@@ -76,6 +78,71 @@ NOTICE: Processing sample offspring.txt CNV chr3:3957986-4054960 with copy numbe
 ```
 
 Then run a `ls` command, and you will see two new JPG files in the directory. Try to use SFTP to transfer the two JPG files to your local computer, and examine these two image files.
+
+
+## Detection of structural variants (SVs) from short-read sequencing data
+
+We can use Delly (https://github.com/dellytools/delly) to call SVs from short-read sequencing data
+
+1. Create a folder for this project, using the `mkdir -p ~/project/short_reads_sv/` command. Do `~/project/short_reads_sv/` to enter the directory.
+
+2. Our initial exercise will focus on two example bam files which covers a 2 Mbp region in the human genome. 
+The bam files are here: 
+
+```
+/shared/data/NA12878_test_data/short-reads/chr1.2mb.bwa.bam # aligner: BWA-MEM
+/shared/data/NA12878_test_data/short-reads/chr1.2mb.mp2.bam # aligner: Minimap2
+```
+*WARNING: the two bam fils are not in this folder right now.*
+
+You can use the following commands to run Delly: 
+
+```
+delly call -g hg37d5.chr1.fa -o chr1.2mb.bwa.bam.delly.bcf chr1.2mb.bwa.bam
+delly call -g hg37d5.chr1.fa -o chr1.2mb.mp2.bam.delly.bcf chr1.2mb.mp2.bam
+```
+*WARNING: paths to the reference fasta file and the bam files need to be updated
+
+In the above commands, `-g` specifies the reference fasta file and `-o` specifies the output BCF file. BCF is the binary version of VCF.
+
+3. The program will run for a few minutes and we can get the following output files. 
+
+```
+chr1.2mb.bwa.bam.delly.bcf
+chr1.2mb.bwa.bam.delly.bcf.csi
+chr1.2mb.mp2.bam.delly.bcf
+chr1.2mb.mp2.bam.delly.bcf.csi
+```
+The `.csi` file is the index file of the `.bcf` files. 
+
+We can use bcftools to convert the `.bcf` files to VCF format: 
+
+```
+bcftools view chr1.2mb.bwa.bam.delly.vcf > chr1.2mb.bwa.bam.delly.vcf
+bcftools view chr1.2mb.mp2.bam.delly.bcf > chr1.2mb.mp2.bam.delly.vcf
+```
+
+4. The know SV is 1:156526705-156528935 (deletion). We can use the following command to check if the deletion is in the vcf files: 
+
+```
+grep 156526 chr1.2mb.bwa.bam.delly.vcf chr1.2mb.mp2.bam.delly.vcf 
+```
+
+`grep` is a command to match string in text files. In this case, we want to find string `156526`. The position in the vcf file may be a few hundred base pair away from the true position so we don't grep the exact position `156526705`. 
+
+We can get the following results:
+
+```
+chr1.2mb.bwa.bam.delly.vcf:1	156526704	DEL00000046	T	<DEL>	.	PASS	PRECISE;SVTYPE=DEL;SVMETHOD=EMBL.DELLYv0.7.8;CHR2=1;END=156528936;PE=101;MAPQ=60;CT=3to5;CIPOS=-21,21;CIEND=-21,21;INSLEN=0;HOMLEN=20;SR=10;SRQ=0.993827;CONSENSUS=TAAGTGTTCAGGAAGAAAAGGGGCTGGGTTGCTTTAACAAGAGGCTCTGTAAGAAGCAATTTGTCAGGCCTAGAAATTGAGTAGCTCAGCATGTAACACAGAGTGGCTGTCATGGCAGAGGGTGAGTTCCTAAGGTGGTGAGCACAAGATTGACAGGTGGCT;CE=1.94414	GT:GL:GQ:FT:RCL:RC:RCR:CN:DR:DV:RR:R1/1:-235.387,-19.8551,0:10000:PASS:365:141:285:0:0:102:0:66
+chr1.2mb.mp2.bam.delly.vcf:1	156526704	DEL00000110	T	<DEL>	.	PASS	PRECISE;SVTYPE=DEL;SVMETHOD=EMBL.DELLYv0.7.8;CHR2=1;END=156528936;PE=94;MAPQ=60;CT=3to5;CIPOS=-21,21;CIEND=-21,21;INSLEN=0;HOMLEN=20;SR=10;SRQ=0.993827;CONSENSUS=TAAGTGTTCAGGAAGAAAAGGGGCTGGGTTGCTTTAACAAGAGGCTCTGTAAGAAGCAATTTGTCAGGCCTAGAAATTGAGTAGCTCAGCATGTAACACAGAGTGGCTGTCATGGCAGAGGGTGAGTTCCTAAGGTGGTGAGCACAAGATTGACAGGTGGCT;CE=1.94414	GT:GL:GQ:FT:RCL:RC:RCR:CN:DR:DV:RR:R1/1:-235.287,-19.8551,0:10000:PASS:365:82:280:0:0:94:0:66
+```
+
+One call was found in each vcf file.
+In the first line, `1	156526704` indicates that the first breakpoint is at chr1: 156526704; `CHR2=1;END=156528936` indicates that the second breakpoint is at chr1:156528936. 
+
+In the second line, `1	156526704` indicates that the first breakpoint is at chr1:156526704; `CHR2=1;END=156528936`indicates that the second breakpoint is at chr1:156528936. 
+
+Therefore, Delly generated the same results from `chr1.2mb.bwa.bam` and `chr1.2mb.mp2.bam`. 
 
 
 
