@@ -281,9 +281,8 @@ will generate called variants and save in `mp2.longshot.vcf` in a vcf format.
 VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is inside this file.
 
 #### 2.5 Statistics of called variants
-We also want to see how many snps and indels are in the vcf files. To do that please run `conda deactivate` first.
+We also want to see how many snps and indels are in the vcf files.
 ```
-conda deactivate
 mv mp2.longshot.vcf.gz mp2.longshot.vcf.o.gz
 mv mp2.longshot.vcf.gz.csi mp2.longshot.vcf.o.gz.csi
 
@@ -351,16 +350,16 @@ bcftools stats shortlong_comparison/0002.vcf | grep "^SN"
 where you can see 
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      1394
+SN      0       number of records:      1294
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1394
+SN      0       number of SNPs: 1294
 SN      0       number of MNPs: 0
 SN      0       number of indels:       0
 SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-There are 1394 intersected variants called from short reads and long reads. Together with the poor performance achieved by longshot, it seems that more complicated variant calling tools would be used, such as `deepvariant` developed by google.
+There are 1294 intersected variants called from short reads and long reads. Together with the poor performance achieved by longshot, it seems that more complicated variant calling tools would be used, such as `deepvariant` developed by google.
 
 
 ## After the tutorial
