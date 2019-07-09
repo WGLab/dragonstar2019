@@ -54,7 +54,7 @@ A simple way for variant calling is to use bcftools. We can generate variant cal
 
 1. On bam file aligned with `minimap2`. 
 ```
-bcftools mpileup -f ref/hg37d5.chr1.fa chr1.2mb.mp2.bam | bcftools call -mv -Ob -o mp2.bcftools.call.bcf
+bcftools mpileup -r 1:155000000-157000000 -f ref/hg37d5.chr1.fa chr1.2mb.mp2.bam | bcftools call -mv -Ob -o mp2.bcftools.call.bcf
 ```
 will call variants and save to `mp2.bcftools.call.bcf` in a bcf format. 
 You can view the file using 
@@ -76,7 +76,7 @@ to convert bcf to vcf;
 2. On A bam file aligned with `bwa bam`
 Simiarly, 
 ```
-bcftools mpileup -f ref/hg37d5.chr1.fa chr1.2mb.bwa.bam | bcftools call -mv -Ob -o bwa.bcftools.call.bcf
+bcftools mpileup -r 1:155000000-157000000 -f ref/hg37d5.chr1.fa chr1.2mb.bwa.bam | bcftools call -mv -Ob -o bwa.bcftools.call.bcf
 ``` 
 to call variants and save to `bwa.bcftools.call.bcf`. 
 You can also use `bcf view` to what variants have been called.
