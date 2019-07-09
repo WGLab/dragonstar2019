@@ -92,6 +92,7 @@ We next generate statistics of the called variants.
 
 ##### 1.5.1. On bam file aligned with `minimap2`. 
 ```
+bcftools view -i '%QUAL>=200' mp2.bcftools.call.bcf > mp2.bcftools.call.vcf
 bgzip -f mp2.bcftools.call.vcf
 bcftools index -f mp2.bcftools.call.vcf.gz
 bcftools stats mp2.bcftools.call.vcf.gz | grep "^SN"
@@ -99,16 +100,16 @@ bcftools stats mp2.bcftools.call.vcf.gz | grep "^SN"
 will generate the statistics below
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      2406
+SN      0       number of records:      2060
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1896
+SN      0       number of SNPs: 1765
 SN      0       number of MNPs: 0
-SN      0       number of indels:       510
+SN      0       number of indels:       295
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   26
-SN      0       number of multiallelic SNP sites:       2
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
 ```
-where there are 1896 snps and 510 indels among 2 millions bp region. 
+where there are 1765 snps and 295 indels among 2 millions bp region. 
 
 ```
 bcftools stats mp2.bcftools.call.vcf.gz | grep "TSTV"
@@ -117,9 +118,9 @@ will give the statistics below:
 ```
 # TSTV, transitions/transversions:
 # TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
-TSTV    0       1336    562     2.38    1335    561     2.38
+TSTV    0       1260    505     2.50    1260    505     2.50
 ```
-where TS is 2.38 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
+where TS is 2.5 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
 
 ###### 1.5.1.1 Evaluation of the variant calling
 We next compare the called variants against high-quality variants in a gold-standard set.
@@ -141,41 +142,42 @@ bcftools stats minimap2_perf/0002.vcf | grep "^SN"
 And then,
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      1565
+SN      0       number of records:      1588
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1546
+SN      0       number of SNPs: 1569
 SN      0       number of MNPs: 0
 SN      0       number of indels:       19
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   1
-SN      0       number of multiallelic SNP sites:       1
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
 ```
-It seems that there are 1565 called variants which are correct, and there are total 2406 called variants, and thus the precision is 1565/2406=0.65. Using 
+It seems that there are 1588 called variants which are correct, and there are total 2060 called variants, and thus the precision is 1588/2060=0.771. Using 
 ```
 bcftools stats vcf/vcf.chr1.2mb.vcf.gz | grep "^SN"
 ```
-We can know that there are 1922 gold-standard variants, and thus, the recall is 1565/1922=0.814.
+We can know that there are 1922 gold-standard variants, and thus, the recall is 1588/1922=0.826.
 
 
 ##### 1.5.2. On A bam file aligned with `bwa bam`
 ```
-bgzip bwa.bcftools.call.vcf
+bcftools view -i '%QUAL>=200' bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
+bgzip -f bwa.bcftools.call.vcf
 bcftools index -f bwa.bcftools.call.vcf.gz
 bcftools stats bwa.bcftools.call.vcf.gz | grep "^SN"
 ```
 will generate the statistics below
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      2499
+SN      0       number of records:      2074
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1980
+SN      0       number of SNPs: 1772
 SN      0       number of MNPs: 0
-SN      0       number of indels:       519
+SN      0       number of indels:       302
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   26
-SN      0       number of multiallelic SNP sites:       2
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
 ```
-where there are 1980 snps and 519 indels among 2 millions bp region. 
+where there are 1772 snps and 302 indels among 2 millions bp region. 
 
 ```
 bcftools stats bwa.bcftools.call.vcf.gz | grep "TSTV"
@@ -184,9 +186,9 @@ will give the statistics below:
 ```
 # TSTV, transitions/transversions:
 # TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
-TSTV    0       1401    581     2.41    1400    580     2.41
+TSTV    0       1266    506     2.50    1266    506     2.50
 ```
-where TS is 2.41 times compared with TV.
+where TS is 2.5 times compared with TV.
 
 ###### 1.5.2.1 Evaluation of the variant calling
 This called variants is also compared against the gold-standard variants, and precision and recall will be calculated.
@@ -197,16 +199,16 @@ bcftools stats bwa_perf/0002.vcf | grep "^SN"
 Similarly, we get
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      1565
+SN      0       number of records:      1590
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1546
+SN      0       number of SNPs: 1571
 SN      0       number of MNPs: 0
 SN      0       number of indels:       19
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   1
-SN      0       number of multiallelic SNP sites:       1
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
 ```
-The precision is 1565/2499=0.626, and the recall is 1565/1922=0.814. Compared with the variants called with `minimap2`, it seems that on short reads, `minimap2` gives better performance.
+The precision is 1590/2074=0.767, and the recall is 1590/1922=0.827. Compared with the variants called with `minimap2`, it seems that on short reads, `minimap2` gives better performance.
 
 
 #### 1.6 Comparison of two called variants.
@@ -219,16 +221,16 @@ bcftools stats twoshort_comparison/0002.vcf | grep "^SN"
 and you will have 
 ```
 SN      0       number of samples:      1
-SN      0       number of records:      2334
+SN      0       number of records:      2041
 SN      0       number of no-ALTs:      0
-SN      0       number of SNPs: 1866
+SN      0       number of SNPs: 1764
 SN      0       number of MNPs: 0
-SN      0       number of indels:       468
+SN      0       number of indels:       277
 SN      0       number of others:       0
-SN      0       number of multiallelic sites:   24
-SN      0       number of multiallelic SNP sites:       2
+SN      0       number of multiallelic sites:   0
+SN      0       number of multiallelic SNP sites:       0
 ```
-Where you can see that less than 5% variants are different between the two sets of called variants. But one can try to use quality filer `-i '%QUAL>=20'` to investigate high-quality varriants only to see whether higher overlapping percentage can be obtained.
+Where you can see that the majority of the two sets of called variants are same. 
 
 
 ### 2. Long read alignment and variants calling
