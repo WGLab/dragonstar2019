@@ -16,46 +16,28 @@ You will see that your command line prompt is now changed to something that look
 
 ### Practice basic commands for fq and fa files
 
-How many reads in a fq.
+Examine the first two reads in a fastq file.
 ```
-sed -n '1~4 p' data/sr.chr1.2mb_1.fq | wc
-```
-
-Get sequences for all reads
-```
-sed -n '1~4 p' data/sr.chr1.2mb_1.fq | less
-```
-or with line number
-```
-sed -n '2~4 p' data/sr.chr1.2mb_1.fq | awk '{print NR" : "$0}' | less
+head -n 8 data/sr.chr1.2mb_1.fq
 ```
 
-Get information after '+' for each reads
+The output is below:
+
 ```
-cat data/sr.chr1.2mb_1.fq | paste - - - - | awk '{print $3"\t"$4}' | less
+@HISEQ1:9:H8962ADXX:1:1101:1283:41924
+TTATAGTTTTTAGTGTACAGGTGCTATTCTTCTTTTGTTAATCTTGTTCCCAAGAATTTTTTTTTAATTTACTGCTATTGTAATTGTTGTAATTGGAATTGGATTTTTTATTTTTATTTTTTTATTTTTATTCTATTATTATTATTAT
++
+CCCFFFDEHHHHHEGGHGFHJEFHHIJJIJJJJJJJJJIIGGIJIHHCIIDDB?DGFIHJEFHIFFEFFFCCEA>CCCDC@C;@C>CCB?@@CDDDDACCCCCCDDDDD?CDEED<CDEEDDB8ACEEC8AC:B:>@4@C:@>4@B>C
+@HISEQ1:9:H8962ADXX:1:1101:1403:46126
+AAGTAGCTGGGATTACAGGTGTATGCCACCACGCCTGGCTAATTTTTGTATTTTTAGTACAGACTGGGTTACGCCAGGTCTTGAACTCCTGGCCTCAAGTGATCCGCCCACTCTGGCCTCCCAAAGTCCTGGGATTACAGGCGTGAGC
++
+@??DDBDDHFF;FGHGFH@ICEFEBHFHIIIIBDBH?@;?DHEHBBG6B@FHIIG=FFHBAA7CCEHD@AAA;?<8>A6@>@>5;CCCCCCC?A:5:AA4:+4>A18?9.8?AC@::8:<A??CA?(::@@C(8@C4>>C9?<))++9
 ```
 
+Count the number of reads in a FASTQ file (divide the line number by 4):
 
-Check the number of reads whose sequence containing 'N'
 ```
-sed -n '2~4 p' data/sr.chr1.2mb_1.fq | grep "N" | wc
-```
-
-Check the total number of bases in a fq.
-```
-sed -n '2~4 p' data/sr.chr1.2mb_1.fq | wc
-```
-The last number if the total number of bases.
-
-
-Count the total number of 'N' in a fq.
-```
-cat data/sr.chr1.2mb_1.fq | paste - - - - | cut -f 2 | grep -o [N] | wc
-```
-
-Count the number of 'ATCGNatcg' at the first 100 reads.
-```
-cat data/sr.chr1.2mb_1.fq  | head -n 100 | paste - - - - | cut -f 2 | grep -o [ATCGNatcg] | sort | uniq -c
+[biouser@main-lx startup]$ wc -l data/sr.chr1.2mb_1.fq
 ```
 
 Convert fq to fa
@@ -63,15 +45,7 @@ Convert fq to fa
 cat data/sr.chr1.2mb_1.fq | paste - - - - | cut -f 1,2 | sed 's/^@/>/' | tr "\t" "\n" > sr.chr1.2mb_1.fa
 ```
 
-Delete 'N' from sequences of reads
-```
-sed -e '/^[^>]/s/N//g' sr.chr1.2mb_1.fa | less
-```
-
-Only output reads whose sequence length larger than 65.
-```
-cat data/sr.chr1.2mb_1.fq | paste - - | awk '{if (length($2)>65) print $1"\n"$2}' | less
-```
+The above command represents an easy and fast way to convert FASTQ file to FASTA file with standard Linux commands. Note that `sed` is used to replace the `@` to `>` character.
 
 
 ### Practice basic commands for bam/sam files
@@ -81,7 +55,74 @@ Get basic statistics from a bam
 samtools stats data/chr1.2mb.mp2.bam | grep ^SN | cut -f 2-
 ```
 
-Check reads which failed to align in a bam
+The expected results are given below:
+
+```
+raw total sequences:    1210338
+filtered sequences:     0
+sequences:      1210338
+is sorted:      1
+1st fragments:  605169
+last fragments: 605169
+reads mapped:   1197138
+reads mapped and paired:        1183962 # paired-end technology bit set + both mates mapped
+reads unmapped: 13200
+reads properly paired:  1106334 # proper-pair bit set
+reads paired:   1210338 # paired-end technology bit set
+reads duplicated:       0       # PCR or optical duplicate bit set
+reads MQ0:      1978    # mapped and MQ=0
+reads QC failed:        0
+non-primary alignments: 0
+total length:   179130024       # ignores clipping
+total first fragment length:    89565012        # ignores clipping
+total last fragment length:     89565012        # ignores clipping
+bases mapped:   177176424       # ignores clipping
+bases mapped (cigar):   175426403       # more accurate
+bases trimmed:  0
+bases duplicated:       0
+mismatches:     771150  # from NM fields
+error rate:     4.395861e-03    # mismatches / bases mapped (cigar)
+average length: 148
+average first fragment length:  148
+average last fragment length:   148
+maximum length: 148
+maximum first fragment length:  148
+maximum last fragment length:   148
+average quality:        34.1
+insert size average:    547.5
+insert size standard deviation: 158.5
+inward oriented pairs:  587439
+outward oriented pairs: 2517
+pairs with other orientation:   3154
+pairs on different chromosomes: 0
+percentage of properly paired reads (%):        91.4
+```
+
+You can also use `flagstat` to get a quick statistics on the flags in the file:
+
+```
+samtools flagstat data/chr1.2mb.mp2.bam
+```
+
+The expected output is below:
+
+```
+1213010 + 0 in total (QC-passed reads + QC-failed reads)
+0 + 0 secondary
+2672 + 0 supplementary
+0 + 0 duplicates
+1199810 + 0 mapped (98.91% : N/A)
+1210338 + 0 paired in sequencing
+605169 + 0 read1
+605169 + 0 read2
+1106334 + 0 properly paired (91.41% : N/A)
+1183962 + 0 with itself and mate mapped
+13176 + 0 singletons (1.09% : N/A)
+0 + 0 with mate mapped to a different chr
+0 + 0 with mate mapped to a different chr (mapQ>=5)
+```
+
+Check a few reads which failed to align in a bam
 ```
 samtools view data/chr1.2mb.mp2.bam | awk '{if (and($2,4)) print NR" : "$0}' | less
 ```
@@ -101,15 +142,6 @@ Check the read alignment distribution according to chromosomes.
 samtools view data/chr1.2mb.mp2.bam | cut -f 3 | sort | uniq -c
 ```
 
-Find exact match in a bam
-```
-samtools view data/chr1.2mb.mp2.bam | cut -f 6| awk '!/[NDISH]/{print $0}' | less
-```
-
-Find alignment with insertion and deletion
-```
-samtools view data/chr1.2mb.mp2.bam | cut -f 6| awk '/[DI]/{print $0}' | less
-```
 
 ### Practice basic commands for bcf/vcf files
 
@@ -117,30 +149,6 @@ Get only snps or indels
 ```
 bcftools view -v snps data/mp2.bcftools.call.bcf | less
 bcftools view -v indels data/mp2.bcftools.call.bcf | less
-```
-
-Get insertion only
-```
-bcftools view -v indels data/mp2.bcftools.call.bcf | grep "^[^#]" | awk '{if (length($4)<length($5)) print $0}' | less
-```
-and gent deletions only
-```
-bcftools view -v indels data/mp2.bcftools.call.bcf | grep "^[^#]" | awk '{if (length($4)>length($5)) print $0}' | less
-```
-
-Get the distribution of snps possibliity
-```
-bcftools view -v snps data/mp2.bcftools.call.bcf | grep "^[^#]" | awk '{print $4"->"$5}' | sort | uniq -c
-```
-
-Get averaged coverage for snps
-```
-bcftools view -v snps data/mp2.bcftools.call.bcf | grep "^[^#]" | cut -d "=" -f 2| cut -d ";" -f 1 | awk '{total+=$1} END {print total/NR}' | less
-```
-
-Get averaged coverage for indels
-```
-bcftools view -v indels data/mp2.bcftools.call.bcf | grep "^[^#]" | cut -d "=" -f 2| cut -d ";" -f 1 | awk '{total+=$1} END {print total/NR}' | less
 ```
 
 Get snps and indels whose coverage > 30
@@ -166,7 +174,7 @@ You can use tabix to extract subsets of the vcf files from the 1000genomes websi
 tabix -h ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz 1:155259084-155271225 > 1000G_PKLR.vcf
 ```
 
-This command takes the genomic region "1:155259084-155271225" from the 1000 Genomes Project website and save it as the 1000G_PKLR.vcf file.
+This command takes the genomic region "1:155259084-155271225" (in hg19 coordinate) from the 1000 Genomes Project website and save it as the 1000G_PKLR.vcf file.
 
 The input file is hosted in the FTP server contains the 1000 Genomes Project phase3 release of variant calls. This variant set contains 2504 individuals from 26 populations.
 
@@ -229,5 +237,6 @@ SN      0       number of multiallelic SNP sites:       0
 
 
 ### For other practice
-To do other tutorial, you might need to run `conda deactivate` to go back to the base environment. You might have errors if you do not deactivate the environment.
+
+To do other tutorial, you might need to run `conda deactivate` to get out of the base environment. You might have errors if you do not deactivate the environment.
 
