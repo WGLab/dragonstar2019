@@ -190,10 +190,10 @@ where TS is 2.41 times compared with TV.
 
 ###### 1.5.2.1 Evaluation of the variant calling
 This called variants is also compared against the gold-standard variants, and precision and recall will be calculated.
-``
+```
 bcftools isec bwa.bcftools.call.vcf.gz vcf/vcf.chr1.2mb.vcf.gz -p bwa_perf
 bcftools stats bwa_perf/0002.vcf | grep "^SN"
-``
+```
 Similarly, we get
 ```
 SN      0       number of samples:      1
