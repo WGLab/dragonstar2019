@@ -66,7 +66,7 @@ The web page is below (depending on Internet speed, it may take a while to load 
 
 http://phenolyzer.wglab.org/example.php
 
-5. Bonus exercise
+5. Optional exercise
 
 Many “case reports” will publish clinical phenotypes for patients, usually written in free texts by genetic counselors or medical geneticists. 
 
