@@ -274,19 +274,16 @@ A simple tool `longshot` can be used to call variants from long-reads aligned ba
 
 Then,
 ```
-longshot --bam chr1.2mb.bam --ref ref/hg37d5.chr1.fa --out mp2.longshot.vcf
+longshot --bam chr1.2mb.bam --ref ref/hg37d5.chr1.fa --out mp2.longshot.o.vcf
 ``` 
-will generate called variants and save in `mp2.longshot.vcf` in a vcf format. 
+will generate called variants and save in `mp2.longshot.o.vcf` in a vcf format. 
 
-VCF format is plain text, and you can use `less mp2.longshot.vcf` to see what is inside this file.
+VCF format is plain text, and you can use `less mp2.longshot.o.vcf` to see what is inside this file.
 
 #### 2.5 Statistics of called variants
 We also want to see how many snps and indels are in the vcf files.
 ```
-mv mp2.longshot.vcf.gz mp2.longshot.vcf.o.gz
-mv mp2.longshot.vcf.gz.csi mp2.longshot.vcf.o.gz.csi
-
-bcftools view -i '%QUAL>=30' mp2.longshot.vcf.o.gz > mp2.longshot.vcf
+bcftools view -i '%QUAL>=30' mp2.longshot.o.vcf > mp2.longshot.vcf
 bgzip -f mp2.longshot.vcf
 bcftools index -f mp2.longshot.vcf.gz
 bcftools stats mp2.longshot.vcf.gz | grep "TSTV"
