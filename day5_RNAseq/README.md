@@ -5,6 +5,7 @@ In this tutorial, we assume that we already have the results from the alignment 
 
 ## 1. Preparation of directories and data files.
 1.1 `mkdir -p project/RNA-seq-tutorial` and `cd project/RNA-seq-tutorial` to create tutorial directory.
+
 1.2 `ln -s /shared/data/RNA-seq-tutorial-data data` to link the data of gene counts for further analysis.
 
 ## 2. Prepare R and data
