@@ -13,7 +13,7 @@ The data analysis for differential genes will be conducted `DeSeq2` in R. So, we
 Simple type `R` and `Enter` to enter R software, and then under R,
 ```
 library("DESeq2")
-counts <- read.table("NB_vs_GBM.txt",header=TRUE,stringsAsFactors=TRUE)
+counts <- read.table("data/NB_vs_GBM.txt",header=TRUE,stringsAsFactors=TRUE)
 rownames(counts) <- counts$Geneid
 counts <- counts [ ,-1]
 ```
