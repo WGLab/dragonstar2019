@@ -361,5 +361,5 @@ There are 1294 intersected variants called from short reads and long reads. Toge
 
 ## After the tutorial
 
-To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects if you do not practice `2.5`. ***If you still have issues to run other projects, please re-login.***
+To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
 
