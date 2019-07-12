@@ -8,6 +8,13 @@ In this tutorial, we assume that we already have the results from the alignment 
 
 1.2 `ln -s /shared/data/RNA-seq-tutorial-data data` to link the data of gene counts for further analysis.
 
+1.3 To use installed softwares, you need to run 
+```
+. /shared/miniconda3/etc/profile.d/conda.sh
+conda activate base
+```
+
+
 ## 2. Prepare R and data
 The data analysis for differential genes will be conducted `DeSeq2` in R. So, we will open the R and load `DeSeq2` and data for next step.
 Simple type `R` and `Enter` to enter R software, and then under R,
@@ -117,4 +124,7 @@ awk -F ',' '{if(($3 > 1 || $3 < -1) && length($1)>2) print $1}' NB_v_GBM.csv  | 
 ```
 The top 100 genes with folder change > 2 (or < 0.5) will be output to `NB_v_GBM.csv.top100_genes.txt`. One can copy the gene list and paste to Enrichr for Gene Ontology, pathway, and TF-target enrichment analyses.
 
+## After the tutorial
+
+To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
 
