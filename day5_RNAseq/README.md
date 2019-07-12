@@ -87,6 +87,7 @@ dev.off()
 
 4.4 Using `ggplot`
 ```
+library(ggplot2)
 data <- plotPCA(rld, intgroup=c("condition", "libtype"), returnData=TRUE)
 percentVar <- round(100 * attr(data, "percentVar"))
 pdf("m_plotPCA_ggplot.pdf");
