@@ -240,3 +240,10 @@ SN      0       number of multiallelic SNP sites:       0
 
 To do other tutorial, you might need to run `conda deactivate` to get out of the base environment. You might have errors if you do not deactivate the environment.
 
+### Use genome browser and Ensembl to retrieve gene annotation information
+
+We prepared a few slides illustrating how to download information from commonly used genomics web servers to download annotation information for genes and transcripts. You can open this PPT file and follow instructions there to finish the exercise and get more familiar with these two web sites.
+
+The file can be downloaded from [download_annotation.pdf](download_annotation.pdf).
+
+
