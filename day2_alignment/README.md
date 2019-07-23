@@ -39,16 +39,33 @@ samtools index chr1.2mb.mp2.bam
 ```
 Reads will be aligned with chr1, and then sorted and saved into a bam file and then build index for it.
 
+The first command should finish in a few minutes, and should use less than 4GB memory. The second command should finish instantly. If your command takes very long time to run, please report to TA to solve the issue.
+
+You can read the manual for minimap2 [here](https://lh3.github.io/minimap2/minimap2.html). As you will see, we used `-ax sr` for "short genomic paired-end reads" because this is a short-read sequencing data set with 148bp read length.
+
+The second command is used to build an index, and you can see that a new file `chr1.2mb.mp2.bam.bai` is generated. The index file is important to facilitate downstream analysis on the BAM file.
+
 Note that here we used the `hg37d5.chr1.fa` file as reference, which contains sequence for chromosome 1 only. This allows the software to complete the alignment in a short period of time. In real-world settings, you should align reads to the entire genome.
 
-You can read the manual for minimap2 [here](short genomic paired-end reads). As you will see, we used `-ax sr` for "short genomic paired-end reads" because this is a short-read sequencing data set with 148bp read length.
 
 ##### 1.2.2 Alignment with bwa-mem. 
 ```
 bwa mem ref/hg37d5.chr1.fa data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.fq | samtools sort | samtools view -bS - > chr1.2mb.bwa.bam
 samtools index chr1.2mb.bwa.bam
 ```
-Ann alignment bam file will be generated and indexed for further analysis.
+An alignment bam file will be generated and indexed for further analysis.
+
+Similar to the minimap2 command used in the procedure above, here we only align to `hg37d5.chr1.fa` (chromosome 1), to speed up the exercise. However, you will see that this command takes much longer time to finish, compared to minimap2. Generally speaking, it should finish within 5-10 minutes. You can check the screen for progress.
+
+You can read the manual for bwa-mem [here](http://bio-bwa.sourceforge.net/bwa.shtml). As you will see, we supplied two FASTQ files in the command, so this command assumes the i-th read in the first file `sr.chr1.2mb_1.fq` and the i-th read in the second file `sr.chr1.2mb_2.fq` constitute a read pair. In the paired-end mode, the mem command will infer the read orientation and the insert size distribution from a batch of reads.
+
+Since the cloud server has two available CPU cores per node, we can speed up the alignment by using multiple threads. You can try the command below to see how it speeds up the alignment:
+
+```
+bwa mem -t 2 ref/hg37d5.chr1.fa data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.fq | samtools sort | samtools view -bS - > chr1.2mb.bwa.bam
+```
+
+When running the program, you can open a second terminal window, and run the `top` command to see the CPU usage (the display refreshes every a few seconds, and you can press "q" to quite the `top` command). Since two cores are requested, you will see that the CPU usage (%CPU) is 200. In practice, most whole genome sequencing studies nowadays use multiple cores (and likely multiple computing nodes) to speed up the alignment procedure.
 
 #### 1.3 View bam files
 One can see what is bam in two ways.
