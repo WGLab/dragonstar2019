@@ -100,7 +100,7 @@ The long-read data was generated on lambda DNA control on the Oxford Nanopore pl
 total reads: 1591
 total length: 4786525
 ```
-In this tutorial, two tools will be used to conduct long read sequence assembly, including canu and wtdbg.
+In this tutorial, two tools will be used to conduct long read sequence assembly, including canu and wtdbg2.
 
 ### 2.1 Canu
 #### 2.1.1 Preparation of folders and data
@@ -143,17 +143,25 @@ cd ~/project/assembly/long-reads-lambda/wtdbg2
 ```
 
 #### 2.2.2 Run `wtdbg2` step-by-step
-There are several steps to use `wtdbg2` for genome assembly.
+There are several steps to use `wtdbg2` for genome assembly. Note that since we did not install wtdbg2 within conda, we have to use the full path name in the command below.
 
 ```
 /shared/tools/wtdbg2/wtdbg2 -x ont -g 50k -i /shared/data/lambda_100x/lambda_100x.fastq -t 2 -fo lambda_wtdbg2
 ```
 to assemble long reads. 
 
+We will see that the assembly process is very fast and finish almost instantly, compared to the canu assembly that we performed above.
+
 ```
 /shared/tools/wtdbg2/wtpoa-cns -t 2 -i lambda_wtdbg2.ctg.lay.gz -fo lambda_wtdbg2.ctg.slf.fa
 ```
 to derive consensus.
+
+We will see that there is only one contig in the final results. It is slightly smaller than the expected size.
+
+```
+>ctg1 len=47560
+```
 
 #### 2.2.3 Polishing
 Additionally, the assembled sequence can be polished using the commands below
@@ -162,13 +170,14 @@ minimap2 -t 2 -ax map-ont lambda_wtdbg2.ctg.slf.fa /shared/data/lambda_100x/lamb
 samtools view lambda_wtdbg2.ctg.map.srt.bam | /shared/tools/wtdbg2/wtpoa-cns -t 2 -d lambda_wtdbg2.ctg.slf.fa -i - -fo lambda_wtdbg2.ctg.lrp.fa
 ```
 
-#### 2.2.4 Assembly results
-Finally, the result sequence can be found in `lambda_wtdbg2.ctg.slf.fa`, and the polished sequence can be found in `lambda_wtdbg2.ctg.lrp.fa`.
+The process involves aligning original reads to the `lambda_wtdbg2.ctg.slf.fa` assembly, and then polishing the contig using the aligned reads and generate the `lambda_wtdbg2.ctg.lrp.fa` file that is polished.
+
+If you have extra time, try to use the `head` command to take approximately 30%, 20% and 10% of the original reads, and run assembly again to see how the results change.
 
 
 ## 3. Evaluation of assembly results
 
-We next evaluate the results of the assembly. For both canu and wtdbg, only one contig is generated from the assembly of 100X data, unlike short-read assembly where hundreds of contigs are generated. The reference genome is ~48kb, so we compare the assembly with the reference genome first to evaluate completeness and accuracy.
+We next evaluate the results of the assembly. For both canu and wtdbg, only one contig is generated from the assembly of 100X data, unlike short-read assembly where hundreds of contigs are generated. The reference genome is ~48kb, so we compare the assembly with the reference genome first to evaluate completeness and accuracy. 
 
 
 
