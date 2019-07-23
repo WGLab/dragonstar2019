@@ -164,7 +164,11 @@ bcftools index chr1.2mb.bwa.bam.delly.filter.bcf
 bcftools index chr1.2mb.mp2.bam.delly.filter.bcf
 ```
 
-The resulting VCF files have 7 and 6 records, respectively. You can use `bcftools stats` to check that. Among them, 3 records are identical between the two files.
+The resulting VCF files have 7 and 6 records, respectively. You can use `bcftools stats` to check that. Among them, 2 records are identical/similar between the two files by manual review.
+
+Unfortunately, it seems that `bcftools isec` or `bedtools intersect` cannot correctly handle these VCF file to find overlaps between them. Since the files are small, you can manually check them one by one to find overlap; otherwise, you may use an alternative tool ANNOVAR to find overlap between the two files (`annotate_variation.pl chr1.2mb.bwa.bam.delly.filter.avinput . -region -dbtype generic -genericdbfile chr1.2mb.mp2.bam.delly.filter.avinput`).
+
+Another important thing to note is that several of these variants have genotype of "0/0" which means that even though a potentail SV is detected, it is not genotyped. Based on [this article](https://groups.google.com/forum/#!topic/delly-users/i9srCzuhNhc), Delly tries to maximize sensitivity during SV discovery. The genotyping, however, is very conservative and involves a re-alignment of reads against the reference and the alternative haplotype so it can indeed happen that an SV is discovered but then genotyping settles on 0/0 (homozygous reference). In our results, the shared SVs (1:155119793-155119899 inversion, 156526724-156528936 deletion) have identical genotypes between the two files.
 
 
 
