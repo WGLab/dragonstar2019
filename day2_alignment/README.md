@@ -118,7 +118,7 @@ bcftools view mp2.bcftools.call.bcf > mp2.bcftools.call.vcf
 ``` 
 to convert bcf to vcf.
 
-2. On A bam file aligned with `bwa bam`
+2. On A bam file aligned with `bwa mem`
 Simiarly, 
 ```
 bcftools mpileup -r 1:155000000-157000000 -f ref/hg37d5.chr1.fa chr1.2mb.bwa.bam | bcftools call -mv -Ob -o bwa.bcftools.call.bcf
@@ -137,8 +137,8 @@ bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
 ``` 
 can be used to convert bcf to vcf for further analysis.
 
-#### 1.5 Statistics and evaluation of variants calling
-We next generate statistics of the called variants.
+#### 1.5 Evaluation of variants calling
+We next generate statistics of the called variants. Note that we used default parameters in bcftools for variant calling, so the calls are not optimal. More specialized variant calling tools (such as GATK) are available and are widely used.
 
 ##### 1.5.1. On bam file aligned with `minimap2`. 
 ```
