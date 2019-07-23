@@ -71,7 +71,7 @@ We then input the first read into this box, "TTATAGTTTTTAGTGTACAGGTGCTATTCTTCTTT
 
 Click the first link with the highest sore with "browser" action, you will now see where this read is located exactly in the genome, like below:
 
-![img/hgtrack.PNG](img/hgtrack.PNG)
+![img/hgtrack.png](img/hgtrack.png)
 
 but if you select the "details" action, you will see how this read compares with a portion of the genome base by base:
 
