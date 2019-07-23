@@ -41,7 +41,7 @@ Reads will be aligned with chr1, and then sorted and saved into a bam file and t
 
 The first command should finish in a few minutes, and should use less than 4GB memory. The second command should finish instantly. If your command takes very long time to run, please report to TA to solve the issue.
 
-You can read the manual for minimap2 [here](https://lh3.github.io/minimap2/minimap2.html). As you will see, we used `-ax sr` for "short genomic paired-end reads" because this is a short-read sequencing data set with 148bp read length.
+You can read the manual for minimap2 [here](https://lh3.github.io/minimap2/minimap2.html). As you will see, we used `-ax sr` for "short genomic paired-end reads" because this is a short-read sequencing data set with 148bp read length. When two read files are specified, minimap2 reads from each file in turn and merge them into an interleaved stream internally. Two reads are considered to be paired if they are adjacent in the input stream and have the same name.
 
 The second command is used to build an index, and you can see that a new file `chr1.2mb.mp2.bam.bai` is generated. The index file is important to facilitate downstream analysis on the BAM file.
 
@@ -68,29 +68,39 @@ bwa mem -t 2 ref/hg37d5.chr1.fa data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.fq | sa
 When running the program, you can open a second terminal window, and run the `top` command to see the CPU usage (the display refreshes every a few seconds, and you can press "q" to quite the `top` command). Since two cores are requested, you will see that the CPU usage (%CPU) is 200. In practice, most whole genome sequencing studies nowadays use multiple cores (and likely multiple computing nodes) to speed up the alignment procedure.
 
 #### 1.3 View bam files
-One can see what is bam in two ways.
+
+We can examine the output bam file in a few different ways.
 
 ##### 1.3.1 View bam records
 ```
 samtools view chr1.2mb.bwa.bam | less
 ``` 
-to see how to represent alignment for each reads. 
-`type q` to exit.
+to see how to represent alignment for each read. Detailed description of the SAM format is described [here](https://samtools.github.io/hts-specs/SAMv1.pdf). You can type `q` to exit the `less` session.
+
+Alternatively, you can use `samtools view chr1.2mb.bwa.bam | head` to print the first 10 lines to the terminal, and then examine the output yourself.
 
 ###### 1.3.2 tview bam files
 ```
 samtools tview -p 1:156000000 chr1.2mb.bwa.bam ref/hg37d5.chr1.fa
 ``` 
-to see how alignments parallel with the reference genome.
+to see how alignments parallel with the reference genome (the first line in the screen).
+
+You can press left and right key in the keyboard to move to the left or right of the screen. 
+
+To jump to a specific genomic position, you can type `g`, and then enter the coordiante. Try to jump to the "1:156000211" position.
+
+To quite the tview session, just press `q`.
+
 
 #### 1.4 Variants calling
-A simple way for variant calling is to use bcftools. We can generate variant calling for both bam files generatd above.
+A simple way for variant calling is to use bcftools. We can generate variant calling for both bam files generated above.
 
 1. On bam file aligned with `minimap2`. 
 ```
 bcftools mpileup -r 1:155000000-157000000 -f ref/hg37d5.chr1.fa chr1.2mb.mp2.bam | bcftools call -mv -Ob -o mp2.bcftools.call.bcf
 ```
 will call variants and save to `mp2.bcftools.call.bcf` in a bcf format. 
+
 You can view the file using 
 ```
 bcftools view mp2.bcftools.call.bcf | less
@@ -101,11 +111,12 @@ bcftools view -i '%QUAL>=20' mp2.bcftools.call.bcf | less
 ``` 
 to only view those higher quality (>20) variants.
 
-If you want to need vcf files for analysis, please use
+BCF is a binary format, and sometimes you may want to have a text-format VCF file for additional analysis and examination. If you want to convert the file formats, you can use
+
 ```
 bcftools view mp2.bcftools.call.bcf > mp2.bcftools.call.vcf
 ``` 
-to convert bcf to vcf;
+to convert bcf to vcf.
 
 2. On A bam file aligned with `bwa bam`
 Simiarly, 
@@ -113,6 +124,11 @@ Simiarly,
 bcftools mpileup -r 1:155000000-157000000 -f ref/hg37d5.chr1.fa chr1.2mb.bwa.bam | bcftools call -mv -Ob -o bwa.bcftools.call.bcf
 ``` 
 to call variants and save to `bwa.bcftools.call.bcf`. 
+
+The first mpileup part generates genotype likelihoods at each genomic position with coverage, and use a pipe to feed the output to the second part; the second call part makes the actual calls. You can add `--threads 2` to the second command to use two threads, but since the more time consuming step is the first step, it will not shorten the waiting time much.
+
+Generally speaking, the command should finish within 5-10 minutes. Note that we restricted pileup to a specific genomic region, and used a reference file for chromosome 1 only, so that we can shorten the waiting time for this command.
+
 You can also use `bcf view` to what variants have been called.
 
 Also, 
