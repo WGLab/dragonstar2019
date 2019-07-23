@@ -29,7 +29,10 @@ Another easy way to check the length distribution and total base pairs in a FAST
 awk 'NR%4 == 2 {lengths[length($0)]++ ; counter++; totallen+=length($0)} END {for (l in lengths) {print l, lengths[l]}; print "total reads: " counter; print "total length: " totallen}' data/art.lambda.cov1001.fq
 ```
 
-It is not that important for this dataset, because all reads have the same length, but it will be important for the exercises involving long reads. The results are below, showing that there are 16150 reads with 150bp, totalling 2.4 million bases.
+The logic of the `awk` command is this: for every second line in 4 lines (the sequence line), measure the length of the sequence and record the information in count and totallen. When all lines are read, loop over the array to print its content. Finally, print out the total number of reads and total length of reads.
+
+It is not that important for this particular dataset, because all reads have the same length, but it will be useful in some scenarios (for example, after adapter trimming of FASTQ files, or for long-read sequencing). The results are below, showing that there are 16150 reads with 150bp, totalling 2.4 million bases.
+
 ```
 150 16150
 total reads: 16150
@@ -56,7 +59,7 @@ The results of the assembly can be found in the files
 
 `lambda_vel/contigs.fa`: contig file
 
-In this file, we can see over a dozen contigs in this file. The first a few contigs are something similar to below:
+In this file, we can see over a dozen contigs in this file. Using `grep '>' lambda_vel/contigs.fa | head`, the first a few contigs are something similar to below:
 
 ```
 >NODE_2_length_2656_cov_79.119354
@@ -91,7 +94,13 @@ Therefore, the assembly quality is significantly improved with the additional ar
 
 ## 2. Long read assembly
 
-The long-read data was generated on lambda DNA control on the Oxford Nanopore platform by Dr. Fang Li in our lab, and the data is stored in `/shared/data/lambda_100x/lambda_100x.fastq`. In this tutorial, two tools will be used to conduct long read sequence assembly.
+The long-read data was generated on lambda DNA control on the Oxford Nanopore platform by Dr. Fang Li in our lab, and the data is stored in `/shared/data/lambda_100x/lambda_100x.fastq`. Using the awk command described above, we can get a basic idea about the data set below. Again it is approximately 100X coverage.
+
+```
+total reads: 1591
+total length: 4786525
+```
+In this tutorial, two tools will be used to conduct long read sequence assembly, including canu and wtdbg.
 
 ### 2.1 Canu
 #### 2.1.1 Preparation of folders and data
@@ -104,12 +113,22 @@ Then enter the directory: `cd ~/project/assembly/long-reads-lambda/canu`
 #### 2.1.2 Running `canu`
 To do the assembly, run 
 ```
-nohup time canu -p lambda_canu -d lambda_canu genomeSize=50k -nanopore-raw /shared/data/lambda_100x/lambda_100x.fastq gnuplotTested=true useGrid=False minReadLength=500 > canu.nohup.log &
+canu -p lambda_canu -d lambda_canu genomeSize=50k -nanopore-raw /shared/data/lambda_100x/lambda_100x.fastq gnuplotTested=true useGrid=False minReadLength=500
 ```
 It would take several minutes to be done. 
- 
+
 #### 2.1.3 Assembly results
 The results can be found in `lambda_canu/lambda_canu.contigs.fasta`
+
+We can check how many contigs are generated:
+```
+grep '>' lambda_canu/lambda_canu.contigs.fasta
+```
+
+The results show that one contig with 48160bp is assembled.
+```
+>tig00000001 len=48160 reads=169 covStat=29.03 gappedBases=no class=contig suggestRepeat=no suggestCircular=no
+```
 
 ### 2.2 wtdbg2
 #### 2.2.1 Preparation of folders and data
