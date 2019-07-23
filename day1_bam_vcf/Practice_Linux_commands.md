@@ -6,7 +6,9 @@
 conda activate base
 ```
 
-You will see that your command line prompt is now changed to something that look like `(base) [biouser@test-0010 ]$ `. This indicates that you are already in the base environment in conda, and we can proceed with the exercise.
+Conda is an open source package management system and environment management system that runs on Windows, macOS and Linux. Conda quickly installs, runs and updates packages and their dependencies. Conda easily creates, saves, loads and switches between environments on your local computer. It is especially useful when working in cloud computing settings to ensure that programs can run in different environments. For most of the exercises that we will do in the next a few days, we will use `conda` to manage the software packages.
+
+You will see that your command line prompt is now changed to something that look like `(base) [biouser@test-0010 ]$ `. This indicates that you are already in the "base" environment in conda, and we can proceed with the exercise. Note that many software tools are already pre-installed within the "base" environment, so that you can directly run these software tools without installation.
 
 2. Prepare folders
 
@@ -14,12 +16,16 @@ You will see that your command line prompt is now changed to something that look
 
 2.2 `ln -s /shared/data/practice_data data` to link the fq, bam and vcf files for practice.
 
+If you forgot about the `mkdir`, `cd` and `ln` commands, you can always check the [/day1_linux/Linux_Basics.md](/day1_linux/Linux_Basics.md) tutorial.
+
 ### Practice basic commands for fq and fa files
 
 Examine the first two reads in a fastq file.
 ```
 head -n 8 data/sr.chr1.2mb_1.fq
 ```
+
+The `head` command is described in the Linux_Basics.md tutorial as well. The command above prints the first 8 lines of the file called `data/sr.chr1.2mb_1.fq`.
 
 The output is below:
 
@@ -34,11 +40,15 @@ AAGTAGCTGGGATTACAGGTGTATGCCACCACGCCTGGCTAATTTTTGTATTTTTAGTACAGACTGGGTTACGCCAGGTC
 @??DDBDDHFF;FGHGFH@ICEFEBHFHIIIIBDBH?@;?DHEHBBG6B@FHIIG=FFHBAA7CCEHD@AAA;?<8>A6@>@>5;CCCCCCC?A:5:AA4:+4>A18?9.8?AC@::8:<A??CA?(::@@C(8@C4>>C9?<))++9
 ```
 
+The output contains information on two sequence reads, as described in class. Review the content of each of the four lines for each read.
+
 Count the number of reads in a FASTQ file (divide the line number by 4):
 
 ```
 [biouser@main-lx startup]$ wc -l data/sr.chr1.2mb_1.fq
 ```
+
+---
 
 Convert fq to fa
 ```
@@ -47,8 +57,24 @@ cat data/sr.chr1.2mb_1.fq | paste - - - - | cut -f 1,2 | sed 's/^@/>/' | tr "\t"
 
 The above command represents an easy and fast way to convert FASTQ file to FASTA file with standard Linux commands. Note that `sed` is used to replace the `@` to `>` character.
 
+Now use the `less sr.chr1.2mb_1.fa` command to examine the content of the output file, and press "q" to quite the screen. (If you forget about the `less` command, review the [/day1_linux/Linux_Basics.md](/day1_linux/Linux_Basics.md) tutorial.
+
+---
+
+Next we take the first read, and see whether we can use Genome Browser to locate it in the human genome. To do this, we can open a web browser such as Chrome, go to http://genome.ucsc.edu, then click "Genomes" -> "Human GRCh37/hg19", to show the genome browser for the GRCh37 coordinates. Now you can click "Tool" in the top menu and select "Blat", to see the Blat page as below. 
+
+[img/blat.PNG](img/blat.PNG)
+
+We then input the first read into this box, "TTATAGTTTTTAGTGTACAGGTGCTATTCTTCTTTTGTTAATCTTGTTCCCAAGAATTTTTTTTTAATTTACTGCTATTGTAATTGTTGTAATTGGAATTGGATTTTTTATTTTTATTTTTTTATTTTTATTCTATTATTATTATTAT", and see what comes out of it. Many genomic positions can have mapping to this read, but only the first hit to "chr1   -   155374822 155374969" has the highest matching scores (146, with 99.4% identity) In addition, the query size is only 148bp, and the first and last base is 1 and 148 respectively, meaning that this read is fully mapped to the database. The actual results are shown below:
+
+[img/blat_results.PNG](img/blat_results.PNG)
+
 
 ### Practice basic commands for bam/sam files
+
+A formal documentation for SAMtools can be found [here](http://www.htslib.org/doc/samtools.html). After running the exercises below, you may want to read the documentation, test other arguments, and play around with the files yourself.
+
+We will use a small BAM file, which contains aligned sequences in a 2Mb region in chromosome 1, for this exercise.
 
 Get basic statistics from a bam
 ```
@@ -121,6 +147,8 @@ The expected output is below:
 0 + 0 with mate mapped to a different chr
 0 + 0 with mate mapped to a different chr (mapQ>=5)
 ```
+
+
 
 Check a few reads which failed to align in a bam
 ```
