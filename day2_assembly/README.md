@@ -130,6 +130,10 @@ The results show that one contig with 48160bp is assembled.
 >tig00000001 len=48160 reads=169 covStat=29.03 gappedBases=no class=contig suggestRepeat=no suggestCircular=no
 ```
 
+Next, you may want to use the `head` command to take approximately 30%, 20% and 10% of the original reads, and run assembly again to see how the results change.
+
+
+
 ### 2.2 wtdbg2
 #### 2.2.1 Preparation of folders and data
 First, we create an assembly folderto store results.
