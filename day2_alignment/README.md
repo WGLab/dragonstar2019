@@ -304,7 +304,7 @@ SN      0       number of multiallelic SNP sites:       0
 ```
 Where you can see that the vast majority of the two sets of called variants are same. So in this case, variant callers have much higher influence on the final results than the aligners.
 
-We should emphasize that the above comparative analysis is a quick-and-dirty way of checking variant overlaps using `bcftools`. We did not consider many other issues, such as indel re-alignment, the splitting of multi-allelic variants, the heterozygosity of the variants, and so on. For more formal comparison of varint call sets, there are more specialized tools, such as the [vcfeval](https://github.com/RealTimeGenomics/rtg-tools) and [hap.py/som.py](https://github.com/Illumina/hap.py) released by Illumina.
+We should emphasize that the above comparative analysis is a quick-and-dirty way of checking variant overlaps using `bcftools`. We did not consider many other issues, such as indel re-alignment, the splitting of multi-allelic variants, the heterozygosity of the variants, the regions with low mappability, and so on. For more formal comparison of varint call sets, there are more specialized tools, such as the [vcfeval](https://github.com/RealTimeGenomics/rtg-tools) and [hap.py/som.py](https://github.com/Illumina/hap.py) released by Illumina. For a description on how GA4GH evaluates variant calling performance using GIAB data, you can check [here](https://github.com/ga4gh/benchmarking-tools/blob/master/resources/high-confidence-sets/giab.md).
 
 ### 2. Long read alignment and variants calling
 
