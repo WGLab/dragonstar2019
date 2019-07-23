@@ -138,7 +138,8 @@ bcftools view bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
 can be used to convert bcf to vcf for further analysis.
 
 #### 1.5 Evaluation of variants calling
-We next generate statistics of the called variants. Note that we used default parameters in bcftools for variant calling, so the calls are not optimal. More specialized variant calling tools (such as GATK) are available and are widely used.
+
+We next generate statistics of the called variants. Note that we used default parameters in bcftools for variant calling, so the variant calls are not optimal. More specialized variant calling tools (such as GATK) that use population information or allow haplotype-based calling are available and can be used to improve accuracy.
 
 ##### 1.5.1. On bam file aligned with `minimap2`. 
 ```
@@ -159,7 +160,10 @@ SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-where there are 1765 snps and 295 indels among 2 millions bp region. 
+
+In the commands above, we first filter a subset of more confident variant calls and write them to a VCF file `mp2.bcftools.call.vcf`, then compress the file and perform some simple statistics on the file using `bcftools`.
+
+We can see that there are 1765 snps and 295 indels among 2 millions bp region. Generally speaking, we expect to see 1 variant per 1000 base pairs in human genome, so this is consistent with our expectation.
 
 ```
 bcftools stats mp2.bcftools.call.vcf.gz | grep "TSTV"
@@ -170,13 +174,17 @@ will give the statistics below:
 # TSTV  [2]id   [3]ts   [4]tv   [5]ts/tv        [6]ts (1st ALT) [7]tv (1st ALT) [8]ts/tv (1st ALT)
 TSTV    0       1260    505     2.50    1260    505     2.50
 ```
-where TS is 2.5 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)"
+where TS is 2.5 times compared with TV. According to [wiki](https://en.wikipedia.org/wiki/Transition_%28genetics%29), "Transition, in genetics and molecular biology, refers to a point mutation that changes a purine nucleotide to another purine (A ↔ G), or a pyrimidine nucleotide to another pyrimidine (C ↔ T)". Generall speaking, for a whole-genome sequencing data set, the Transition/Transversion ratio should be around 2, and for a whole-exome sequencnig data set, the ratio should be around 3. Here we are looking at a very small genomic region with a small number of variants, so the statistics may deviate from whole genome expectation.
 
 ###### 1.5.1.1 Evaluation of the variant calling
+
 We next compare the called variants against high-quality variants in a gold-standard set.
 ```
 bcftools isec mp2.bcftools.call.vcf.gz vcf/vcf.chr1.2mb.vcf.gz -p minimap2_perf
 ```
+
+The gold-standard set consists of high quality variant calls retrieved from the [genome in a bottle consortium](ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/) on this particular genomic region.
+
 The first command will generate the intersection of called variants and the gold-standard variants, and you have a new folder called `minimap2_perf` with the files below
 ```
 minimap2_perf/0000.vcf  for records private to  mp2.bcftools.call.vcf.gz
@@ -201,7 +209,7 @@ SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-It seems that there are 1588 called variants which are correct, and there are total 2060 called variants, and thus the precision is 1588/2060=0.771. If only SNPs are considered, the precision is 1569/1765=0.89.
+It seems that there are 1588 called variants which are consistent with gold standard, and there are total 2060 called variants, and thus the precision is 1588/2060=0.771. If only SNPs are considered, the precision is 1569/1765=0.89.
 
 Using 
 ```
@@ -219,7 +227,7 @@ SN      0       number of others:       0
 SN      0       number of multiallelic sites:   27
 SN      0       number of multiallelic SNP sites:       1
 ```
-We can know that there are 1922 gold-standard variants and among them, 1587 are SNPs, and thus, the recall is 1588/1922=0.826, and the recall of SNPs is 1569/1587=0.989.
+We can know that there are 1922 gold-standard variants and among them, 1587 are SNPs, and thus, the recall is 1588/1922=0.826, and the recall of SNPs is 1569/1587=0.989. Note that there are also a few multiallelic sites (sites with two or more alternative alleles) that we did not include in the calculation.
 
 
 ##### 1.5.2. On A bam file aligned with `bwa bam`
@@ -294,10 +302,12 @@ SN      0       number of others:       0
 SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
-Where you can see that the majority of the two sets of called variants are same. 
+Where you can see that the vast majority of the two sets of called variants are same. So in this case, variant callers have much higher influence on the final results than the aligners.
 
+We should emphasize that the above comparative analysis is a quick-and-dirty way of checking variant overlaps using `bcftools`. We did not consider many other issues, such as indel re-alignment, the splitting of multi-allelic variants, the heterozygosity of the variants, and so on. For more formal comparison of varint call sets, there are more specialized tools, such as the [vcfeval](https://github.com/RealTimeGenomics/rtg-tools) and [hap.py/som.py](https://github.com/Illumina/hap.py) released by Illumina.
 
 ### 2. Long read alignment and variants calling
+
 #### 2.1 Preparation of the folder and data
 1. `cd ~/project/alignment/`, and then `mkdir long-reads` and `cd long-reads`
 2. Link data by `ln -s /shared/data/NA12878_test_data/long-reads data`
