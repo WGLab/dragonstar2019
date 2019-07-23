@@ -184,14 +184,27 @@ Check the read alignment distribution according to chromosomes.
 samtools view data/chr1.2mb.mp2.bam | cut -f 3 | sort | uniq -c
 ```
 
+You can check the original SAMtools documentation to understand the results more. For example, this command creates the following output:
+```
+     24 *
+1212986 1
+```
+
+So what do the 24 and 1212986 mean?
+
 
 ### Practice basic commands for bcf/vcf files
 
-Get only snps or indels
+There are several BCF and VCF files that we prepared in the `data` directory. The files contains variant calls on the 2Mb region in chromosome 1.
+
+Get only snps or indels and check the content of the file:
 ```
 bcftools view -v snps data/mp2.bcftools.call.bcf | less
 bcftools view -v indels data/mp2.bcftools.call.bcf | less
 ```
+
+Notice the differences in the columns that describe REF and ALT alleles in these two files.
+
 
 Get snps and indels whose coverage > 30
 ```
@@ -210,7 +223,7 @@ bcftools view -i 'GT!="1/1"' data/mp2.bcftools.call.bcf | less
 
 ## Advanced practice of processing VCF files
 
-You can use tabix to extract subsets of the vcf files from the 1000genomes websites. Thanks to the fact that tabix uses a index file, you will be able to download only portions of the files, without having to download everything in local.
+You can use tabix to extract subsets of the vcf files from the 1000genomes websites or other large databases hosted online. Thanks to the fact that tabix uses a index file, you will be able to download only portions of the files, without having to download everything to your local computer.
 
 ```
 tabix -h ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/ALL.chr1.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz 1:155259084-155271225 > 1000G_PKLR.vcf
@@ -254,7 +267,7 @@ Now examine the new vcf file, you can see that the INFO field is updated with th
 1       155269776       rs3020781       A       G       100     PASS    AC=1;AN=6       GT      0|0     0|1     0|0
 ```
 
-So now we have 8 sites that are polymorphic in the VCF file (in other words, we found eight SNPs that have mutations in at least one of the three subjects.
+So now we have 8 sites that are polymorphic in the VCF file (in other words, we found eight SNPs that have mutations in at least one of the three subjects.)
 
 You can make a statistics on the test3.vcf file:
 
@@ -277,14 +290,21 @@ SN      0       number of multiallelic sites:   0
 SN      0       number of multiallelic SNP sites:       0
 ```
 
+Among the 8 variants, 7 are SNPs and 1 is an indel.
+
+Of couse, BCF has more advanced functions, you can probably explore these advanced functions yourself using the manuals at [here](http://www.htslib.org/doc/bcftools.html). In later exercises, we will come back to bcftools again to compare VCF files.
+
 
 ### For other practice
 
-To do other tutorial, you might need to run `conda deactivate` to get out of the base environment. You might have errors if you do not deactivate the environment.
+To do other tutorial, you might need to run `conda deactivate` to get out of the base environment. You might have errors if you do not deactivate the environment first.
+
 
 ### Use genome browser and Ensembl to retrieve gene annotation information
 
-We prepared a few slides illustrating how to download information from commonly used genomics web servers to download annotation information for genes and transcripts. You can open this PPT file and follow instructions there to finish the exercise and get more familiar with these two web sites.
+The UCSC Genome Browser (which we used above) and the Ensembl Genome Browser are probably the most widely used web servers to retrieve genomic feature information and visualize the various genomic features.
+
+We prepared a few slides illustrating how to download information from these commonly used genomics web servers to download annotation information for genes and transcripts. You can open this PDF file and follow instructions there to finish the exercise and get more familiar with these two web sites.
 
 The file can be downloaded from [download_annotation.pdf](download_annotation.pdf).
 
