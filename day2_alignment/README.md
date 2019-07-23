@@ -17,7 +17,20 @@ conda activate base
 4. Link high quality variant file by `ln -s /shared/data/ref_hg37_chr1/vcf vcf`
 
 #### 1.2 Short reads alignment
-In this tutorial, the reads are from a 2MB region in chr1. There are two ways to do the alignment.
+In this tutorial, the reads are from a 2MB region in chr1. We will test two ways to do the alignment.
+
+Fist, we check what input data we will use:
+
+```
+(base) [biouser14@main-lx short-reads]$ wc -l data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.fq
+  2432672 data/sr.chr1.2mb_1.fq
+  2432672 data/sr.chr1.2mb_2.fq
+  4865344 total
+```
+
+So there are about 1.2 million paired-end reads (remember that each read uses 4 lines in the FASTQ file). 
+
+You can also check the read length yourself, by examining the first a few lines of the FASTQ file. You will see that it is 148bp in each read.
 
 ##### 1.2.1 Alignment with minimap2. 
 ```
@@ -25,6 +38,10 @@ minimap2 -ax sr ref/hg37d5.chr1.fa data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.fq |
 samtools index chr1.2mb.mp2.bam
 ```
 Reads will be aligned with chr1, and then sorted and saved into a bam file and then build index for it.
+
+Note that here we used the `hg37d5.chr1.fa` file as reference, which contains sequence for chromosome 1 only. This allows the software to complete the alignment in a short period of time. In real-world settings, you should align reads to the entire genome.
+
+You can read the manual for minimap2 [here](short genomic paired-end reads). As you will see, we used `-ax sr` for "short genomic paired-end reads" because this is a short-read sequencing data set with 148bp read length.
 
 ##### 1.2.2 Alignment with bwa-mem. 
 ```
