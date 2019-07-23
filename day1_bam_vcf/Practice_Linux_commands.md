@@ -63,11 +63,11 @@ Now use the `less sr.chr1.2mb_1.fa` command to examine the content of the output
 
 Next we take the first read, and see whether we can use Genome Browser to locate it in the human genome. To do this, we can open a web browser such as Chrome, go to http://genome.ucsc.edu, then click "Genomes" -> "Human GRCh37/hg19", to show the genome browser for the GRCh37 coordinates. Now you can click "Tool" in the top menu and select "Blat", to see the Blat page as below. 
 
-[img/blat.PNG](img/blat.PNG)
+![img/blat.PNG](img/blat.PNG)
 
 We then input the first read into this box, "TTATAGTTTTTAGTGTACAGGTGCTATTCTTCTTTTGTTAATCTTGTTCCCAAGAATTTTTTTTTAATTTACTGCTATTGTAATTGTTGTAATTGGAATTGGATTTTTTATTTTTATTTTTTTATTTTTATTCTATTATTATTATTAT", and see what comes out of it. Many genomic positions can have mapping to this read, but only the first hit to "chr1   -   155374822 155374969" has the highest matching scores (146, with 99.4% identity) In addition, the query size is only 148bp, and the first and last base is 1 and 148 respectively, meaning that this read is fully mapped to the database. The actual results are shown below:
 
-[img/blat_results.PNG](img/blat_results.PNG)
+![img/blat_results.PNG](img/blat_results.PNG)
 
 
 ### Practice basic commands for bam/sam files
