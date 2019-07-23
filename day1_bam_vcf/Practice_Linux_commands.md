@@ -71,17 +71,17 @@ We then input the first read into this box, "TTATAGTTTTTAGTGTACAGGTGCTATTCTTCTTT
 
 Click the first link with the highest sore with "browser" action, you will now see where this read is located exactly in the genome, like below:
 
-![hg_track.png](hg_track.png)
+![img/hg_track.png](img/hg_track.png)
 
 but if you select the "details" action, you will see how this read compares with a portion of the genome base by base:
 
-![blat_alignment.png](blat_alignment.png)
+![img/blat_alignment.png](img/blat_alignment.png)
 
 ---
 
 Since there are a few reads that are not mapped to the chr1 2Mb region in chromosome 1, we want to check where they came from (could be from a different chromsome) and whether they can still be partially mapped to a specicific region with high mismatch rates. We take the first sequence from the above run as an example `samtools view data/chr1.2mb.mp2.bam | awk '{if (and($2,4)) print NR" : "$0}' | head -n 1`. Then manually use Blat to analyze this sequence "AATTTTAATTTTAGTTTGCCCCAATATCACACTAGCTTATTCCGAGCGCACAATCTTACCGTAAAGCTGCCTGAAGATGCACGCGGCACCCCTCGTCGTCTTGTCCTCAATGACAACGAACGAGCGTACCTTCTCCCTCGAGCAAAGC". You will see that it actually matches to a region in chromosome 7, but it has a split reads that creates a large deletion of ~400bp in the alignment.
 
-![blat_chr7_alignment.png](blat_chr7_alignment.png)
+![img/blat_chr7_alignment.png](img/blat_chr7_alignment.png)
 
 
 ### Practice basic commands for bam/sam files
