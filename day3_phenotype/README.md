@@ -67,10 +67,7 @@ The web page is below (depending on Internet speed, it may take a while to load 
 http://phenolyzer.wglab.org/example.php
 
 
-5. Now let's go back to the case study of a patient with hemolytic anemia. The whole-exome sequencing data is provided as `anemia.vcf`. The phenotype is "hemolytic anemia". Using the ANNOVAR software to annotate the VCF file, and Phenolyzer to predict candidate genes for the phenotype. Then try to find the most likely candidate genes that cause the disease.
-
-
-6. Optional exercise
+5. HPO extraction exercise
 
 Many “case reports” will publish clinical phenotypes for patients, usually written in free texts by genetic counselors or medical geneticists. 
 
