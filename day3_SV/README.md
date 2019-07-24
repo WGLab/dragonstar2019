@@ -93,7 +93,15 @@ We can use Delly (https://github.com/dellytools/delly) to call SVs from short-re
 ~/project/alignment/short-reads/chr1.2mb.mp2.bam # aligner: Minimap2
 ```
 
+If you have not finish the alignment section, you can find the bam files here: 
+
+```
+/shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_calling/chr1.2mb.bwa.bam
+/shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_calling/chr1.2mb.mp2.bam
+```
+
 You can use the following commands to run Delly: 
+
 
 ```
 delly call -g /shared/data/ref_hg37_chr1/ref/hg37d5.chr1.fa -o chr1.2mb.bwa.bam.delly.bcf ~/project/alignment/short-reads/chr1.2mb.bwa.bam
@@ -125,27 +133,47 @@ bcftools view chr1.2mb.bwa.bam.delly.bcf > chr1.2mb.bwa.bam.delly.vcf
 bcftools view chr1.2mb.mp2.bam.delly.bcf > chr1.2mb.mp2.bam.delly.vcf
 ```
 
-4. There is a know SV within this 2Mb region at 1:156526706-156528935 (deletion). This SV is documented in the GIAB SV call set [here](ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/technical/svclassify_Manuscript/Supplementary_Information/Personalis_1000_Genomes_deduplicated_deletions.bed). This is a 3-column BED file, and if you search through the BED file you can see a record "1	156526705	156528935" there. Since BED file uses zero-start coordiante, this translate to 1:156526706-156528935 in 1-start coordinate. We can use the following command to check if the deletion is in the vcf files: 
+4. There is a know SV within this 2Mb region at 1:156526706-156528935 (deletion). This SV is documented in the GIAB SV call set [here](http://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/technical/svclassify_Manuscript/Supplementary_Information/Personalis_1000_Genomes_deduplicated_deletions.bed) or here: `/shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_calling/NA12878_Personalis_1000_Genomes_deduplicated_deletions.bed`.  This is a 3-column BED file, and if you search through the BED file you can see a record "1	156526705	156528935" there. Since BED file uses zero-start coordiante, this translate to 1:156526706-156528935 in 1-start coordinate. 
+
+
+We can use the following command to check if we have detected any SVs that overlap with the GIAB SV call set. 
 
 ```
-grep 156526 chr1.2mb.bwa.bam.delly.vcf chr1.2mb.mp2.bam.delly.vcf 
+bedtools intersect  -a chr1.2mb.bwa.bam.delly.vcf -b /shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_calling/NA12878_Personalis_1000_Genomes_deduplicated_deletions.bed  -f 0.5 -F 0.5  -wb 
 ```
 
-`grep` is a command to match string in text files. In this case, we want to find string `156526`. The position in the vcf file may be a few hundred base pair away from the breakpoints of the GIAB SV call set  from the true position so we are unable grep the exact position `156526705`. 
+The `intersect` command in bedtools finds the intersection of two files (-a and -b) . `-f 0.5` specifies that the minimum overlap required as a fraction of the SV in file a is 0.5 and `-F 0.5` specifies that the minimum overlap required as a fraction of the SV in file b is 0.5. 50% reciprocal overlapping is the recomanded requirement for finding overlapping SV calls from two data sets. By default, only the SV in file a is output. `-wb` specifies that the record in file b should be output as well. 
 
-We can get the following results:
+This command will generate the following results: 
 
 ```
-chr1.2mb.bwa.bam.delly.vcf:1	156526704	DEL00000046	T	<DEL>	.	PASS	PRECISE;SVTYPE=DEL;SVMETHOD=EMBL.DELLYv0.7.8;CHR2=1;END=156528936;PE=101;MAPQ=60;CT=3to5;CIPOS=-21,21;CIEND=-21,21;INSLEN=0;HOMLEN=20;SR=10;SRQ=0.993827;CONSENSUS=TAAGTGTTCAGGAAGAAAAGGGGCTGGGTTGCTTTAACAAGAGGCTCTGTAAGAAGCAATTTGTCAGGCCTAGAAATTGAGTAGCTCAGCATGTAACACAGAGTGGCTGTCATGGCAGAGGGTGAGTTCCTAAGGTGGTGAGCACAAGATTGACAGGTGGCT;CE=1.94414	GT:GL:GQ:FT:RCL:RC:RCR:CN:DR:DV:RR:R1/1:-235.387,-19.8551,0:10000:PASS:365:141:285:0:0:102:0:66
-chr1.2mb.mp2.bam.delly.vcf:1	156526704	DEL00000110	T	<DEL>	.	PASS	PRECISE;SVTYPE=DEL;SVMETHOD=EMBL.DELLYv0.7.8;CHR2=1;END=156528936;PE=94;MAPQ=60;CT=3to5;CIPOS=-21,21;CIEND=-21,21;INSLEN=0;HOMLEN=20;SR=10;SRQ=0.993827;CONSENSUS=TAAGTGTTCAGGAAGAAAAGGGGCTGGGTTGCTTTAACAAGAGGCTCTGTAAGAAGCAATTTGTCAGGCCTAGAAATTGAGTAGCTCAGCATGTAACACAGAGTGGCTGTCATGGCAGAGGGTGAGTTCCTAAGGTGGTGAGCACAAGATTGACAGGTGGCT;CE=1.94414	GT:GL:GQ:FT:RCL:RC:RCR:CN:DR:DV:RR:R1/1:-235.287,-19.8551,0:10000:PASS:365:82:280:0:0:94:0:66
+1	156526724	DEL00000036	C	<DEL>	.	PASS	IMPRECISE;SVTYPE=DEL;SVMETHOD=EMBL.DELLYv0.8.1;CHR2=1;END=156528936;PE=101;MAPQ=60;CT=3to5;CIPOS=-51,51;CIEND=-51,51	GT:GL:GQ:FT:RCL:RC:RCR:CN:DR:DV:RR:RV	1/1:-606.474,-30.5794,0:10000:PASS:356:137:279:0:0:102:0:0	1	156526705   156528935
 ```
 
-One call was found in each vcf file.
-In the first line, `1  156526704` indicates that the first breakpoint is at chr1:156526704; `CHR2=1;END=156528936` indicates that the second breakpoint is at chr1:156528936. 
+We can see that one overlapping call is found. 
+The last 3 columns represent the SV call in the GIAB SV call set. The first 11 columns are from the `chr1.2mb.bwa.bam.delly.vcf` file. `1	156526724` indicates that the first breakpoint is at chr1:156526724; `CHR2=1;END=156528936` indicates that the second breakpoint is at chr1:156528936. 
 
-In the second line, `1	156526704` indicates that the first breakpoint is at chr1:156526704; `CHR2=1;END=156528936`indicates that the second breakpoint is at chr1:156528936. 
+We can use the a similar command to find the overlapping calls between `chr1.2mb.mp2.bam.delly.vcf` and the GIAB truth set. 
 
-Therefore, Delly generated the same results from `chr1.2mb.bwa.bam` and `chr1.2mb.mp2.bam`. 
+```
+bedtools intersect  -a chr1.2mb.mp2.bam.delly.vcf -b /shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_calling/NA12878_Personalis_1000_Genomes_deduplicated_deletions.bed  -f 0.5 -F 0.5  -wb 
+```
+
+This command will generate the following results: 
+
+```
+1	156526724	DEL00000099	C	<DEL>	.	PASS	IMPRECISE;SVTYPE=DEL;SVMETHOD=EMBL.DELLYv0.8.1;CHR2=1;END=156528936;PE=94;MAPQ=60;CT=3to5;CIPOS=-50,50;CIEND=-50,50	GT:GL:GQ:FT:RCL:RC:RCR:CN:DR:DV:RR:RV	1/1:-557.599,-28.2956,0:10000:PASS:356:80:274:0:0:94:0:0	1	156526705   156528935
+```
+You can see that, Delly generated the same SV call from `chr1.2mb.bwa.bam` and `chr1.2mb.mp2.bam`. 
+
+
+You can use the following command to find overlapping calls from `chr1.2mb.bwa.bam` and `chr1.2mb.mp2.bam`.
+
+```
+bedtools intersect -a chr1.2mb.bwa.bam.delly.vcf -b chr1.2mb.mp2.bam.delly.vcf -f 0.8 -F 0.8 -wb > chr1.bwa_mp2_overlapping_svs.txt
+```
+
+
 
 However, in addition to this particular deletion, Delly generated many more SV calls on both BAM files. We can do some more investigation here. Using `bcftools`, we can see that there are 43 SV records in the first file and 117 records in the second file. Many such records have a FILTER called LowQual. To check this we can use the command below:
 
@@ -158,8 +186,13 @@ We can see that there are only 7 SV calls that have PASS as the filter. Next, we
 ```
 bcftools filter -e 'FILTER="LowQual"' chr1.2mb.bwa.bam.delly.bcf -Ob -o chr1.2mb.bwa.bam.delly.filter.bcf
 bcftools filter -e 'FILTER="LowQual"' chr1.2mb.mp2.bam.delly.bcf -Ob -o chr1.2mb.mp2.bam.delly.filter.bcf
+
 bcftools index chr1.2mb.bwa.bam.delly.filter.bcf
 bcftools index chr1.2mb.mp2.bam.delly.filter.bcf
+
+bcftools view chr1.2mb.bwa.bam.delly.filter.bcf > chr1.2mb.bwa.bam.delly.filter.vcf
+bcftools view chr1.2mb.mp2.bam.delly.filter.bcf > chr1.2mb.mp2.bam.delly.filter.vcf
+
 ```
 
 The resulting VCF files have 7 and 6 records, respectively. You can use `bcftools stats` to check that. Among them, 2 records are identical/similar between the two files by manual review.
