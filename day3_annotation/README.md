@@ -1,33 +1,43 @@
-1. go to your home folder, and `mkdir -p ~/project/annotation/` folder
+In this exercise, we will learn the basic usage of ANNOVAR, which is an efficient software tool to utilize update-to-date information to functionally annotate genetic variants detected from diverse genomes (including human genome hg18, hg19, hg38, as well as mouse, worm, fly, yeast and many others). Given a list of variants (for example, in a VCF file), ANNOVAR can perform Gene-based annotation (identify whether SNPs or CNVs cause protein coding changes and the amino acids that are affected), Region-based annotation (identify variants that overlap with specific genomic regions or genomic features), and Filter-based annotation (identify variants that are documented in specific databases).
+
+1. We will first create a new working directory: `mkdir -p ~/project/annotation/`.
 
 2. Our initial exercise will focus on an example included in the ANNOVAR package. 
 
-Do `cd ~/project/annotation/`, and then `mkdir ex2` and `cd ex2`
-
-3. We will first annotate a small VCF file to see how the procedure works:
+Do `cd ~/project/annotation/` to enter the directory. We will copy a VCF file here, and create a symbolic link to the `/shared/tools/annovar/humandb/` directory which contains many library files used in annotation.
 
 ```
-table_annovar.pl /shared/tools/annovar/example/ex2.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out myanno -remove -protocol refGene,cytoBand,exac03,avsnp147,dbnsfp35a -operation g,r,f,f,f -nastring . -vcfinput -polish
+cp /shared/tools/annovar/example/ex2.vcf .
+ln -s /shared/tools/annovar/humandb/
 ```
 
-The command takes the `ex2.vcf` file, and then a series of annotation tasks on the VCF file. Each annotation task corresponds to one protocol and one operation (such as `g`, `r`, and `f`). The `g`, `r` and `f` represent gene-based, region-based and filter-based annotation, respectively, and the different protocol names represent different databases to use for the annotation. The final output is written to `myanno.hg19_multianno.txt` file, as well as `myanno.hg19_multianno.vcf`.
+We can examine the `ex2.vcf` file by `less` command. This is a very small file with only a few variants.
 
-we can take a look at the `myanno.hg19_multianno.txt` file: it is a tab-delimited file, with the first line being the header line. We can open the file in a software such as Excel to examine it in more details.
-
-4. Next, we will try to annotate the VCF file generated from the exercise described previously. We want to find the refGene, cytoBand, dbNFSP scores for non-synonymous SNPs, and the allele frequency in different ethnicity groups as recorded in the gnomAD database. We will only use the exome subset of the gnomAD data, since the genome subset of gnomAD is too large to be used in this exercise.
-
-We first go up one directory:
+3. We will first annotate the VCF file to see how the procedure works:
 
 ```
-cd ..
-mkdir ex3
-cd ex3
+table_annovar.pl ex2.vcf humandb -buildver hg19 -out myanno -remove -protocol refGene,cytoBand,exac03,avsnp147,dbnsfp35a -operation g,r,f,f,f -nastring . -vcfinput -polish
+```
+
+The command takes the `ex2.vcf` file, and then a series of annotation tasks on the VCF file. Each annotation task corresponds to one protocol and one operation (such as `g`, `r`, and `f`). The `g`, `r` and `f` represent gene-based, region-based and filter-based annotation, respectively, and the different protocol names represent different databases to use for the annotation. The final output is written to `myanno.hg19_multianno.txt` file, as well as `myanno.hg19_multianno.vcf`. Note that we specified the `-buildver hg19` so that ANNOVAR looks hg19-specific annotation databases for the annotation. We also specified that the output file name prefix should be `myanno`.
+
+The `-protocol` argument specifies a series of annotation protocols, each corresponding to one entry in the `-operation`. In other words, refGene corresponds to `g` operation, `cytoBand` corresponds to `r` operation, and exac03, avsnp147, dbnsfp35a correspond to `f` operation.
+
+We can take a look at the `myanno.hg19_multianno.txt` file: it is a tab-delimited file, with the first line being the header line. We can open the file in a software such as Excel to examine it in more details. (We can use a FTP software such as [FileZilla](https://filezilla-project.org/) to transfer the file from cloud server to local computer, then open the file in Excel and examine each column. This is much easier than looking through the file in a terminal window, since there may be many columns in the file.
+
+
+4. Next, we will try to annotate the VCF file generated from the VCF exercise that we did in previous days. We want to find the refGene, cytoBand, dbNFSP scores for non-synonymous SNPs, and the allele frequency in different ethnicity groups as recorded in the gnomAD database. We will only use the exome subset of the gnomAD data, since the genome subset of gnomAD is too large to be used in this exercise.
+
+We first copy the VCF file to the local directory:
+
+```
+cp /shared/data/VCF/1000G_PKLR.vcf .
 ```
 
 Then perform the annotation. The command line is below:
 
 ```
-table_annovar.pl /shared/data/VCF/1000G_PKLR.vcf /shared/tools/annovar/humandb/ -buildver hg19 -out pklr -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation gx,r,f,f -nastring . -vcfinput -polish -xref /shared/tools/annovar/example/gene_xref.txt
+table_annovar.pl 1000G_PKLR.vcf humandb/ -buildver hg19 -out pklr -remove -protocol refGene,cytoBand,dbnsfp35a,gnomad211_exome -operation gx,r,f,f -nastring . -vcfinput -polish -xref /shared/tools/annovar/example/gene_xref.txt
 ```
 
 The `-operation` argument tells ANNOVAR which operations to use for each of the protocols: `g` means gene-based, `gx` means gene-based with cross-reference annotation (from `-xref` argument), `r` means region-based and `f` means filter-based. 
@@ -48,7 +58,7 @@ The header line starts with #. The cross-reference file then contains 15 types o
 
 5. Examine the results in the output `pklr.hg19_multianno.txt` file.
 
-6. Once we finish the `test_phenotype` exercise, we will analyze a real exome sequencing data in the `anemia.vcf` file (this is generated on a patient diagnosed with hemolytic anemia). See the `test_exome` for more details on the exercise.
+6. Now we can move on to the `day4_phenotype` exercise. Once we finish it, we will analyze a real exome sequencing data in the `anemia.vcf` file (this is generated on a patient diagnosed with hemolytic anemia), and combine the results with phenotype information, to find disease genes in this patient.
 
 
 
