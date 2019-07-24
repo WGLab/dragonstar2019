@@ -98,6 +98,8 @@ plotCounts(dds, gene=which.min(res$padj), intgroup="condition")
 dev.off()
 ```
 
+![cenpf](img/cenpf.png)
+
 4.3 Plot PCA
 ```
 rld <- rlog(dds, blind=FALSE)
