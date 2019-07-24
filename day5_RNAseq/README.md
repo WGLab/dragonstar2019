@@ -1,7 +1,10 @@
 ## 0. Introduction
-This tutuorial is about how to use existing tools for RNA-seq data analysis. 
-Because of the heavy tasks of aligning RNA-seq data against a reference genome. 
-In this tutorial, we assume that we already have the results from the alignment and gene counts.
+
+This tutuorial is about how to use existing tools in R for RNA-seq data analysis. Because of the large memory requirement (>30GB) for doing a STAR alignment of RNA-Seq data, we omit this step, and directly use results (alignment and gene counts) generated from STAR, as described in class. We will therefore directly start from a file with gene counts for 6 samples (3 cases and 3 controls).
+
+The tutorial below assumes that we will use the cloud server for analysis. However, if Rstudio is available and can be used in the local Windows desktop, it can be used instead. This makes visualization much easier.
+
+The exercise will be done in R, which is a language and environment for statistical computing and graphics. Some students probably do not have experience in R. Do not worry about it, because we will only use very simple commands to illustrate how the expression analysis works, and these commands are generally intuitive to understand.
 
 ## 1. Preparation of directories and data files.
 1.1 `mkdir -p project/RNA-seq-tutorial` and `cd project/RNA-seq-tutorial` to create tutorial directory.
