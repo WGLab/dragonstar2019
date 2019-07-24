@@ -2,9 +2,10 @@
 
 This tutuorial is about how to use existing tools in R for RNA-seq data analysis. Because of the large memory requirement (>30GB) for doing a STAR alignment of RNA-Seq data, we omit this step, and directly use results (alignment and gene counts) generated from STAR, as described in class. We will therefore directly start from a file with gene counts for 6 samples (3 cases and 3 controls).
 
-The tutorial below assumes that we will use the cloud server for analysis. However, if Rstudio is available and can be used in the local Windows desktop, it can be used instead. This makes visualization much easier.
-
 The exercise will be done in R, which is a language and environment for statistical computing and graphics. Some students probably do not have experience in R. Do not worry about it, because we will only use very simple commands to illustrate how the expression analysis works, and these commands are generally intuitive to understand.
+
+The tutorial below assumes that we will use the cloud server for analysis. However, it is likely that Rstudio can be batch installed available in every computer, and can be used in the local Windows desktop. This makes visualization much easier, and we should try to use local Windows version of Rstudio for these exercises. Assuming that RStudio is indeed available in every computer, than we can open R studio, and transfer the necessary files `data/NB_vs_GBM.txt` from the cloud server to local computer for easier analysis. Most of the commands are identical below, except that you no longer ned to use conda to set up environment. Additionally, most of the generated figures can be directly visualized in a windows environment.
+
 
 ## 1. Preparation of directories and data files.
 1.1 `mkdir -p project/RNA-seq-tutorial` and `cd project/RNA-seq-tutorial` to create tutorial directory.
@@ -126,6 +127,126 @@ After that, one needs to exit R by `Ctrl + D` and then `n` for `Save workspace i
 awk -F ',' '{if(($3 > 1 || $3 < -1) && length($1)>2) print $1}' NB_v_GBM.csv  | head -101 | sed 's/\"//g' > NB_v_GBM.csv.top100_genes.txt
 ```
 The top 100 genes with folder change > 2 (or < 0.5) will be output to `NB_v_GBM.csv.top100_genes.txt`. One can copy the gene list and paste to Enrichr for Gene Ontology, pathway, and TF-target enrichment analyses.
+
+
+## 0 single-cell RNA-Seq data analysis
+
+Ideally we will also use Rstudio in local machines to perform analysis, because all the gene counting steps have already been finished.
+
+First, we need to install two R libraries that are required:
+
+```
+library(dplyr)
+library(Seurat)
+```
+If the system generates error, then you should use `install.packages("Seurat")` and `install.packages("dplyr")` to install a few libraries first.
+
+Next, we will load the PBMC single-cell data sets
+
+```
+workshop.data <- Read10X(data.dir = "/shared/data/scRNA-Seq/Data")
+```
+
+
+Next, we want to initialize the Seurat object with the raw (non-normalized data).
+```
+Data <- CreateSeuratObject(counts = workshop.data, project = "Workshop", min.cells = 3, min.features = 200)
+Data
+```
+
+Now start with the standard pre-processing steps
+
+Visualize QC metrics as a violin plot: 
+```
+VlnPlot(Data, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+```
+
+
+We filter cells that have unique feature counts over 2,500 or less than 200
+```
+Data <- subset(Data, subset = nFeature_RNA > 200 & nFeature_RNA < 2500)
+VlnPlot(Data, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
+```
+
+## Normalizing the Data
+
+Seurat employs a global-scaling normalization method "LogNormalize" that normalizes the feature expression measurements for each cell by the total expression, multiplies this by a scale factor (10,000 by default), and log-transforms the result.
+```
+Data <- NormalizeData(Data, normalization.method = "LogNormalize", scale.factor = 10000)
+```
+
+- Identification of highly variable features (feature selection)
+```
+Data <- FindVariableFeatures(Data, selection.method = "vst", nfeatures = 2000)
+```
+
+- plot variable features with and without labels
+```
+plot1 <- VariableFeaturePlot(Data)
+CombinePlots(plots = list(plot1))
+```
+
+- Scaling the data
+Here we shifts the expression of each gene, so that the mean expression across cells is 0, scales the expression of each gene, so that the variance across cells is 1 
+```
+all.genes <- rownames(Data)
+Data <- ScaleData(Data, features = all.genes)
+```
+
+Next, we perform linear dimensional reduction (PCA)
+```
+Data <- RunPCA(Data, features = VariableFeatures(object = Data));
+```
+
+
+Seurat provides several useful ways of visualizing both cells and features that define the PCA
+```
+print(Data[["pca"]], dims = 1:5, nfeatures = 5)
+VizDimLoadings(Data, dims = 1:2, reduction = "pca")
+DimPlot(Data, reduction = "pca")
+DimHeatmap(Data, dims = 1, cells = 500, balanced = TRUE)
+```
+
+
+- Determine the 'dimensionality' of the dataset
+Seurat clusters cells based on their PCA scores. Seurat uses a heuristic method to determine the number of components for the clustering stage
+```
+Data <- JackStraw(Data, num.replicate = 100)
+Data <- ScoreJackStraw(Data, dims = 1:20)
+JackStrawPlot(Data, dims = 1:15)
+```
+
+## Cluster the cells
+
+```
+Data <- FindNeighbors(Data, dims = 1:10)
+Data <- FindClusters(Data, resolution = 0.5)
+```
+
+- Run non-linear dimensional reduction (UMAP/tSNE)
+- To install UMAP, you can do so via reticulate::py_install(packages ='umap-learn')
+```
+Data <- RunTSNE(Data, dims = 1:10)
+DimPlot(Data, reduction = "tsne")
+```
+
+- Finding differentially expressed features (cluster biomarkers)
+- find all markers of cluster 1
+```
+cluster1.markers <- FindMarkers(Data, ident.1 = 1, min.pct = 0.25)
+head(cluster1.markers, n = 5)
+```
+
+- find all markers distinguishing cluster 5 from clusters 0 and 3
+
+```
+cluster5.markers <- FindMarkers(Data, ident.1 = 5, ident.2 = c(0, 3), min.pct = 0.25)
+head(cluster5.markers, n = 5)
+VlnPlot(Data, features = c("MS4A1", "CD79A"))
+FeaturePlot(Data, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP",  "CD8A"))
+```
+
+While you are following the tutorial, it is a good idea to save some intermediate results such as figures and plots, which can be compiled later in to a Word document to help understand what analysis was done today, and what new information you learned from this exercise.
 
 ## After the tutorial
 
