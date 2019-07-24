@@ -8,6 +8,9 @@ The tutorial below assumes that we will use the cloud server for analysis. Howev
 
 
 ## 1. Preparation of directories and data files.
+
+If you are using RStudio in Windows, then the steps below are not relevant. If you are using the cloud server, then follow the steps to create directory and activate conda environment.
+
 1.1 `mkdir -p project/RNA-seq-tutorial` and `cd project/RNA-seq-tutorial` to create tutorial directory.
 
 1.2 `ln -s /shared/data/RNA-seq-tutorial-data data` to link the data of gene counts for further analysis.
@@ -20,7 +23,10 @@ conda activate base
 
 
 ## 2. Prepare R and data
-The data analysis for differential genes will be conducted `DeSeq2` in R. So, we will open the R and load `DeSeq2` and data for next step.
+
+The data analysis requires DESeq2 which is a tool that we described in class. It is already installed in cloud server so you should be able to use it directly. However, if you are using RStudio in local computer, you may need to install it yourself following instructions [here](https://bioconductor.org/packages/release/bioc/html/DESeq2.html).
+
+The data analysis for differential genes will be conducted `DESeq2` in R. So, we will open the R and load `DSSeq2` and data for next step.
 Simple type `R` and `Enter` to enter R software, and then under R,
 ```
 library("DESeq2")
@@ -81,6 +87,10 @@ dev.off()
 ```
 The plot will be saved in `m_plotMA.pdf`.
 
+Note that if you are using RStudio in your local Windows computer, you only need to run `plotMA(res, main="DESeq2", ylim=c(-2,2))`, and a window will pop up automatically with the figure as below:
+
+![deseq2](img/deseq2.png)
+
 4.2 Plot gene read counts
 ```
 pdf("m_plotCounts.pdf");
@@ -126,10 +136,10 @@ After that, one needs to exit R by `Ctrl + D` and then `n` for `Save workspace i
 ```
 awk -F ',' '{if(($3 > 1 || $3 < -1) && length($1)>2) print $1}' NB_v_GBM.csv  | head -101 | sed 's/\"//g' > NB_v_GBM.csv.top100_genes.txt
 ```
-The top 100 genes with folder change > 2 (or < 0.5) will be output to `NB_v_GBM.csv.top100_genes.txt`. One can copy the gene list and paste to Enrichr for Gene Ontology, pathway, and TF-target enrichment analyses.
+The top 100 genes with folder change > 2 (or < 0.5) will be output to `NB_v_GBM.csv.top100_genes.txt`. We can copy the gene list and paste to David, Enrichr, WebGestalt or other tools for Gene Ontology, pathway, and TF-target enrichment analyses.
 
 
-## 0 single-cell RNA-Seq data analysis
+# single-cell RNA-Seq data analysis
 
 As previously mentioned, ideally we will also use Rstudio in local machines to perform analysis, because a few figures will be generated and it is much easier to view the results in local computer, rather than cloud server.
 
