@@ -1,10 +1,10 @@
 ## 0. Introduction
 
-This tutuorial is about how to use existing tools in R for RNA-seq data analysis. Because of the large memory requirement (>30GB) for doing a STAR alignment of RNA-Seq data, we omit this step, and directly use results (alignment and gene counts) generated from STAR, as described in class. We will therefore directly start from a file with gene counts for 6 samples (3 cases and 3 controls).
+This tutuorial is about how to use existing tools in R for RNA-seq data analysis. Because of the large memory requirement (>30GB) for doing a STAR alignment of RNA-Seq data, we will skip this step, and directly use results (alignment and gene counts) generated from STAR, as described in class. We have already prepared such as file, with gene counts for 6 samples (3 cases and 3 controls).
 
 The exercise will be done in R, which is a language and environment for statistical computing and graphics. Some students probably do not have experience in R. Do not worry about it, because we will only use very simple commands to illustrate how the expression analysis works, and these commands are generally intuitive to understand.
 
-The tutorial below assumes that we will use the cloud server for analysis. However, it is likely that Rstudio can be batch installed available in every computer, and can be used in the local Windows desktop. This makes visualization much easier, and we should try to use local Windows version of Rstudio for these exercises. Assuming that RStudio is indeed available in every computer, than we can open R studio, and transfer the necessary files `data/NB_vs_GBM.txt` from the cloud server to local computer for easier analysis. Most of the commands are identical below, except that you no longer ned to use conda to set up environment. Additionally, most of the generated figures can be directly visualized in a windows environment.
+The tutorial below assumes that we will use the cloud server for analysis. However, it is very possible that Rstudio can be batch installed and be available in every computer, and can be used in the local Windows desktop. If this is the case, then this makes visualization much easier, and we should try to use local Windows version of Rstudio for these exercises. Assuming that RStudio is indeed available in every computer, than we can open R studio, and transfer the necessary files `data/NB_vs_GBM.txt` from the cloud server to local computer for easier analysis. Most of the commands are identical below, except that you no longer ned to use conda to set up environment. Additionally, most of the generated figures can be directly visualized in a windows environment.
 
 
 ## 1. Preparation of directories and data files.
@@ -131,17 +131,18 @@ The top 100 genes with folder change > 2 (or < 0.5) will be output to `NB_v_GBM.
 
 ## 0 single-cell RNA-Seq data analysis
 
-Ideally we will also use Rstudio in local machines to perform analysis, because all the gene counting steps have already been finished.
+As previously mentioned, ideally we will also use Rstudio in local machines to perform analysis, because a few figures will be generated and it is much easier to view the results in local computer, rather than cloud server.
 
-First, we need to install two R libraries that are required:
+A note to RStudio users in Windows: For this exercise, two libraries are needed: dplyr and Seurat. If they cannot be loaded, then you need to do `install.packages("dplyr")` and `install.packages("Seurat")` in your Rstudio. Note that Seurat requires R version 3.4 or greater. If you see an error message such as "package ‘Seurat’ is not available (for R version 3.2.5)", then you need to update your R installation. The easiest way to open RGui, type `install.packages("installr")`, then `library(installr)`, then `updateR()`, then follow instructions and confirm update.
+
+First, we need to load two R libraries that are required:
 
 ```
 library(dplyr)
 library(Seurat)
 ```
-If the system generates error, then you should use `install.packages("Seurat")` and `install.packages("dplyr")` to install a few libraries first.
 
-Next, we will load the PBMC single-cell data sets
+Next, we will load the PBMC single-cell data sets. If you are using RStudio in local computer, you can adjust the path below accordingly (you can enter into a specific directory by `setwd("c:/Users/Kai Wang/Desktop/Data")`).
 
 ```
 workshop.data <- Read10X(data.dir = "/shared/data/scRNA-Seq/Data")
@@ -154,6 +155,8 @@ Data <- CreateSeuratObject(counts = workshop.data, project = "Workshop", min.cel
 Data
 ```
 
+You can see that "13714 features across 2700 samples within 1 assay". This tells us that there are expression data for 2700 single cells.
+
 Now start with the standard pre-processing steps
 
 Visualize QC metrics as a violin plot: 
@@ -161,6 +164,9 @@ Visualize QC metrics as a violin plot:
 VlnPlot(Data, features = c("nFeature_RNA", "nCount_RNA"), ncol = 2)
 ```
 
+If using RStudio, you should see a figure like below immediately. Otherwise if using a terminal in the cloud server, you need to save the file as PDF or JPG and then FTP to local machine to view it.
+
+![violin](img/violin.png)
 
 We filter cells that have unique feature counts over 2,500 or less than 200
 ```
@@ -207,14 +213,24 @@ DimPlot(Data, reduction = "pca")
 DimHeatmap(Data, dims = 1, cells = 500, balanced = TRUE)
 ```
 
+Some examples are below:
+
+![dimloading](img/dimloading.png)
+![dimplot](img/dimplot.png)
+![heatmap](img/heatmap.png)
 
 - Determine the 'dimensionality' of the dataset
-Seurat clusters cells based on their PCA scores. Seurat uses a heuristic method to determine the number of components for the clustering stage
+Seurat clusters cells based on their PCA scores. Seurat uses a heuristic method to determine the number of components for the clustering stage. Note that this step may take some time depending on the speed of the local computer or cloud server.
+
 ```
 Data <- JackStraw(Data, num.replicate = 100)
 Data <- ScoreJackStraw(Data, dims = 1:20)
 JackStrawPlot(Data, dims = 1:15)
 ```
+
+An example plot is shown below:
+
+![jackstraw](img/jackstraw.png)
 
 ## Cluster the cells
 
@@ -229,6 +245,10 @@ Data <- FindClusters(Data, resolution = 0.5)
 Data <- RunTSNE(Data, dims = 1:10)
 DimPlot(Data, reduction = "tsne")
 ```
+
+An example plot is shown below:
+
+![tsne](img/tsne.png)
 
 - Finding differentially expressed features (cluster biomarkers)
 - find all markers of cluster 1
@@ -246,9 +266,14 @@ VlnPlot(Data, features = c("MS4A1", "CD79A"))
 FeaturePlot(Data, features = c("MS4A1", "GNLY", "CD3E", "CD14", "FCER1A", "FCGR3A", "LYZ", "PPBP",  "CD8A"))
 ```
 
+We will see how the specific genes are highly enriched in one cluster versus the other clusters:
+
+![ms4a1](img/ms4a1.png)
+![featureplot](img/featureplot.png)
+
 While you are following the tutorial, it is a good idea to save some intermediate results such as figures and plots, which can be compiled later in to a Word document to help understand what analysis was done today, and what new information you learned from this exercise.
 
 ## After the tutorial
 
-To do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
+If you are using the terminal in cloud server, to do other tutorial, you might need to run `conda deactivate` to go back to the base environment for other projects. ***If you still have issues to run other projects, please re-login.***
 
