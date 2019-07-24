@@ -84,7 +84,16 @@ Then run a `ls` command, and you will see two new JPG files in the directory. Tr
 
 We can use Delly (https://github.com/dellytools/delly) to call SVs from short-read sequencing data
 
+
 1. Create a folder for this project, using the `mkdir -p ~/project/short_reads_sv/` command. Use `cd ~/project/short_reads_sv/` to enter the directory.
+
+Run the following command to activate conda environment : 
+
+```
+. "/shared/miniconda3/etc/profile.d/conda.sh"
+conda activate base
+```
+
 
 2. We will use the bam files generated in the alignment training section as input. You should alreadly have the following files if you have completed the alignment section (note that the `~` sign means the user's home directory, for example, the `~` for `biouser` means `/home/biouser`.
 
