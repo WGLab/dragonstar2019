@@ -139,7 +139,7 @@ can be used to convert bcf to vcf for further analysis.
 
 #### 1.5 Evaluation of variants calling
 
-We next generate statistics of the called variants. Note that we used default parameters in bcftools for variant calling, so the variant calls are not optimal. More specialized variant calling tools (such as GATK) that use population information or allow haplotype-based calling are available and can be used to improve accuracy.
+We next generate statistics of the called variants. Note that we used default parameters in bcftools for variant calling, so the variant calls are not optimal. More specialized variant calling tools (such as GATK and Strelka2) that use population information or allow haplotype-based calling are available and can be used to improve accuracy.
 
 ##### 1.5.1. On bam file aligned with `minimap2`. 
 ```
