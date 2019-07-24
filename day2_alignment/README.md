@@ -316,11 +316,12 @@ We should emphasize that the above comparative analysis is a quick-and-dirty way
 
 #### 2.2 Long reads alignment
 ```
-minimap2 -ax map-ont ref/hg37d5.chr1.fa data/np.chr1.2mb.fq  | samtools sort | samtools view -bS - > chr1.2mb.bam
+minimap2 --MD -ax map-ont ref/hg37d5.chr1.fa data/np.chr1.2mb.fq  | samtools sort | samtools view -bS - > chr1.2mb.bam
 samtools index chr1.2mb.bam
 ```
 The commands above will align long reads in `data/np.chr1.2mb.fq`, and then sort/save alignment into a bam file `chr1.2mb.bam`. 
 An index is also created so that you can use `samtools view` or `samtools tview` to view the alignment in the bam file.
+
 
 #### 2.3 View bam files
 One can try one of the commands below to view the bam files.
