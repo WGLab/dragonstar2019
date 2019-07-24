@@ -141,7 +141,35 @@ awk -F ',' '{if(($3 > 1 || $3 < -1) && length($1)>2) print $1}' NB_v_GBM.csv  | 
 The top 100 genes with folder change > 2 (or < 0.5) will be output to `NB_v_GBM.csv.top100_genes.txt`. We can copy the gene list and paste to David, Enrichr, WebGestalt or other tools for Gene Ontology, pathway, and TF-target enrichment analyses.
 
 
-# single-cell RNA-Seq data analysis
+
+
+## 6. (Optional) additional exercise
+
+The above analysis compared 3 samples with normal tissue and cancer tissue, and many genes are expected to be differentially expressed. Next, as an optional exercise, we can compare 3 cell lines with gene knockdown versus 3 cell lines without knockdown, and see how the results change and how DESeq2 handles different experimental conditions.
+
+The RNA-seq data that we will use here is from the paper [Noncoding RNA NORAD Regulates Genomic Stability by Sequestering PUMILIO Proteins](http://www.cell.com/cell/abstract/S0092-8674(15)01641-4). The cell line HCT116. The dataset is downloaded from NCBI SRA with the tools of edirect and fastq-dump.  We focus on DE genes between wide-type and NORAD knockout. There are 3 wild type data sets plus 3 NORAD knockout data sets. The analysis results from this paper can be found [here](https://github.com/WGLab/LabShare/files/567569/table.S3.xlsx). We re-processed the original FASTQ files by STAR and generated the `ReadsPerGene.tab` files used below.
+
+The data are available at /shared/data/RNA-seq-tutorial-data, as `SRR2969247ReadsPerGene.tab` and so on. Note that this time we have counts for each file separately, and did not put them into a single file. You can use the command below to read these files, but you can also combine the files into one single file and read them.
+
+```
+sampleFiles <- c("SRR2969247_STAR/SRR2969247PerGene.out.tab",
+                 "SRR2969248_STAR/SRR2969248PerGene.out.tab",
+                 "SRR2969249_STAR/SRR2969249PerGene.out.tab",
+                 "SRR2969250_STAR/SRR2969250PerGene.out.tab",
+                 "SRR2969251_STAR/SRR2969251PerGene.out.tab",
+                 "SRR2969252_STAR/SRR2969252PerGene.out.tab",
+                 )
+sampleCondition <- c("wt","wt","wt","k", "k","k")
+sampleTable <- data.frame(sampleName = sampleFiles,
+                          fileName = sampleFiles,
+                          condition = sampleCondition)
+ddsHTSeq <- DESeqDataSetFromHTSeqCount(sampleTable = sampleTable,
+                                       directory = directory,
+                                       design = ~ condition)
+```
+
+
+## 7. single-cell RNA-Seq data analysis
 
 As previously mentioned, ideally we will also use Rstudio in local machines to perform analysis, because a few figures will be generated and it is much easier to view the results in local computer, rather than cloud server.
 
