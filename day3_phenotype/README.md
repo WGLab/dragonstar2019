@@ -66,13 +66,17 @@ The web page is below (depending on Internet speed, it may take a while to load 
 
 http://phenolyzer.wglab.org/example.php
 
-5. Optional exercise
+
+5. Now let's go back to the case study of a patient with hemolytic anemia. The whole-exome sequencing data is provided as `anemia.vcf`. The phenotype is "hemolytic anemia". Using the ANNOVAR software to annotate the VCF file, and Phenolyzer to predict candidate genes for the phenotype. Then try to find the most likely candidate genes that cause the disease.
+
+
+6. Optional exercise
 
 Many “case reports” will publish clinical phenotypes for patients, usually written in free texts by genetic counselors or medical geneticists. 
 
 Example clinical notes from a paper (http://molecularcasestudies.cshlp.org/content/2/6/a001131.long): "The proband was born to a non-consanguineous couple, who had an unremarkable pregnancy history; however, at birth a large fontanel was reported. Parents and siblings were healthy and no significant family history was reported (Figure 1). The proband met all developmental milestones, except crawling, up to his first epileptic episode, which occurred at three years of age. After this episode, he lost all speech, began exhibiting autistic behavior, and also started to have frequent generalized tonic-clonic seizures. Over time, tonic, atonic, mild clonic, complex partial, myoclonic and gelastic seizures were reported in the proband. Other developmental skills, including throwing a ball, responding to his name, feeding himself with utensils and self-care skills were lost by 4-years of age. No significant conductive hearing loss, heart abnormalities or delayed bone age were found in the proband at that age. The proband was evaluated (by G.J.L.) at eleven years of age. He presented with several neurological and craniofacial abnormalities including epilepsy, ventriculomegaly, relative macrocephaly, prominent forehead, low hairline, thick eyebrows, wide-set eyes, macrodontia of upper central incisors, and full lips. Hand and foot abnormalities included clinodactyly of the fifth digit, bilateral single transverse palmar creases, brachydactyly and flat feet (Figure 2). He also had a diagnosis of cerebral folate deficiency due to the presence of folate receptor autoantibodies."
 
-A number of tools, such as EHR-Phenolyzer, can convert free texts into HPO terms, and then use these HPO terms for gene prioritization. Some web servers are also developed for this purpose. In this bonus exercise, try to use the web server, available at https://impact2.dbmi.columbia.edu/doc2hpo/, to generate the HPO terms for this patient. Then generate prioritized gene list on this patient using Phenolyzer.
+A number of tools, such as EHR-Phenolyzer, can convert free texts into HPO terms, and then use these HPO terms for gene prioritization. Some web servers are also developed for this purpose. In this bonus exercise, try to use the web server, available at https://impact2.dbmi.columbia.edu/doc2hpo/, to generate the HPO terms for this patient. Then generate prioritized gene list on this patient using Phenolyzer (please use command line to perform this analysis).
 
 
 
