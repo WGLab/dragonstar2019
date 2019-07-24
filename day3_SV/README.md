@@ -1,6 +1,6 @@
 ## Detection of copy number variants from DNA microarrays
 
-1. Creaet a folder for this project, using the `mkdir -p ~/project/penncnv/` command.
+1. Create a folder for this project, using the `mkdir -p ~/project/penncnv/` command.
 
 2. Our initial exercise will focus on examples included in the PennCNV package. 
 
