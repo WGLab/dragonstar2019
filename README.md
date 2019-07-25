@@ -32,6 +32,6 @@ This GitHub repository contains lecture slides as well as the computing exercise
 
     RNA-Seq in human diseases: [Course slide](slides/day5_rnaseq.pdf), [Computing exercise](https://github.com/WGLab/dragonstar2019/tree/master/day5_RNAseq)
     
-    Deep Learning in sequencing data analysis: [Course slide](slides/day5_deep_learning.pdf]
+    Deep Learning in sequencing data analysis: [Course slide](slides/day5_deep_learning.pdf)
 
     Artificial intelligence and somatic variant analysis
