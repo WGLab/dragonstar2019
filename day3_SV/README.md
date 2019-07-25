@@ -336,7 +336,7 @@ Now we can take a look at another deletion that is detected by long-read sequenc
 
 By looking at the IGV plot, we can see that there is no real evidence showing that there is a deletion here. Instead, this region is a low complexity region with A and G only, which probably leads to a high base call error rate and an erraneous deletion calls from long-read data. This problem does not exist in short read data though.
 
-![EFNA](img/efna.png)
+![EFNA1](img/efna1.png)
 
 
 
