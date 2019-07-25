@@ -1,4 +1,4 @@
-1. Identification of candidate genes for a patient with hemolytic anemia
+# Identification of candidate genes for a patient with hemolytic anemia
 
 In this exercise, we will analyze an exome file in VCF format for a patient and find the likely causal gene and a possible genetic diagnosis.
 
@@ -14,7 +14,7 @@ Then combine the genotype/phenotype results together to find disease causal gene
 
 This is an analysis task that the students should try to solve the exome case themselves without following commands. Therefore, we do not provide example command here.
 
-2. Identification of causal de novo mutation for a child presenting with seizures and developmental delays
+# Identification of causal de novo mutation for a child presenting with seizures and developmental delays
 
 This is a case that we published a few years ago, on finding disease genes on a child with seizures and developmental delays. In the original publication, we provided detailed genotype information and phenotype information (including movies and photos and clinical phenotype descriptions) on the patient. These files are available in the [supplementary materials](http://molecularcasestudies.cshlp.org/content/early/2016/07/19/mcs.a001073/suppl/DC1).
 
