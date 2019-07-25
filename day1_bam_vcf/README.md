@@ -307,5 +307,3 @@ The UCSC Genome Browser (which we used above) and the Ensembl Genome Browser are
 We prepared a few slides illustrating how to download information from these commonly used genomics web servers to download annotation information for genes and transcripts. You can open this PDF file and follow instructions there to finish the exercise and get more familiar with these two web sites.
 
 The file can be downloaded from [download_annotation.pdf](download_annotation.pdf).
-
-
