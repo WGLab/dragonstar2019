@@ -242,6 +242,9 @@ plink --noweb --bfile hapmap1 --assoc --adjust --out as2
 ```
 where additional information is saved in `as2.assoc.adjusted`.
 
+You can view the results by `less` or `head`. You will see a few headers such as "GC       BONF       HOLM   SIDAK_SS   SIDAK_SD     FDR_BH     FDR_BY". They represent Genomic-control corrected p-values, Bonferroni single-step adjusted p-values, Holm step-down adjusted p-values, Sidak single-step adjusted p-values, Sidak step-down adjusted p-values, Benjamini & Hochberg (1995) step-up FDR control, and   Benjamini & Yekutieli (2001) step-up FDR control. We did not discuss these statistics specifically in class, but in general, because the effective number of tests is estimated to be 1 million across the genome, most GWAS simply use 5x10-8 as the threshold to declare significance and use replication data (or meta-analysis) to gain further evidence supporting the association signals.
+
+
 ## Genotypic association models.
 Besides a standard allelic test, you can calculate association test with the genotype table with the command below:
 ```
