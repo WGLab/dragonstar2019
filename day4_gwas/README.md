@@ -282,7 +282,8 @@ Association can be tested again with the cluster information with the following 
 ```
 plink --noweb --bfile hapmap1 --mh --within str1.cluster2 --adjust --out aac1
 ```
-`aac1.cmh.adjusted` will show detailed association test. 
+
+Note that the `str1.cluster2` file was generated fromt the command in the previous section. `aac1.cmh` shows the raw association results, and `aac1.cmh.adjusted` will show detailed association test result with adjusted p-values.
 
 The association analysis on the seoncd cluster scheme is
 ```
@@ -302,6 +303,28 @@ But you can also use permutation rather than a stratified analysis.
 plink --noweb --bfile hapmap1 --assoc --pheno qt.phe --perm --within str1.cluster2 --out quant2
 ```
 where in `quant2.qassoc.perm`, `EMP1` means a p-value. After sorting this file with `sort --key=4 -nr quant2.qassoc.perm | head`, top 10 significant SNPs are shown.
+
+## Generate Manhattan plot and QQ plot
+
+The most widely used tool for generating Manhattan plot and QQ plot is called [qqman](https://github.com/stephenturner/qqman) which is a R package. Next we use a simple R script to generate the two plots, using the associaiton results.
+
+```
+Rscript plot_plink.R as1.assoc
+```
+
+The `as1.assoc` file was generated before which contains the association results. The `plot_plink.R` is a simple script that we wrote, which loads two R functions and generate Manhattan and QQ plot, without installing any R package.
+
+You will see a message that two files are generated:
+
+```
+The Manhattan plot is generated as the manhattan.pdf file
+The QQ plot is generated as the qq.pdf file
+```
+
+Now you can use a SFTP software (such as FileZilla) to transfer these two files to your local Windows computer and examine these two files. They are shown below:
+
+![manhattan](img/manhattan.png)
+![qq](img/qq.png)
 
 ## Optional exercise
 
