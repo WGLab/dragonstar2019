@@ -144,7 +144,7 @@ We next generate statistics of the called variants. Note that we used default pa
 ##### 1.5.1. On bam file aligned with `minimap2`. 
 ```
 bcftools view -i '%QUAL>=200' mp2.bcftools.call.bcf > mp2.bcftools.call.vcf
-bgzip -f mp2.bcftools.call.vcf
+bgzip -f mp2.bcftools.call.vcf -c > mp2.bcftools.call.vcf.gz
 bcftools index -f mp2.bcftools.call.vcf.gz
 bcftools stats mp2.bcftools.call.vcf.gz | grep "^SN"
 ```
@@ -233,7 +233,7 @@ We can know that there are 1922 gold-standard variants and among them, 1587 are 
 ##### 1.5.2. On A bam file aligned with `bwa bam`
 ```
 bcftools view -i '%QUAL>=200' bwa.bcftools.call.bcf > bwa.bcftools.call.vcf
-bgzip -f bwa.bcftools.call.vcf
+bgzip -f bwa.bcftools.call.vcf -c > bwa.bcftools.call.vcf.gz
 bcftools index -f bwa.bcftools.call.vcf.gz
 bcftools stats bwa.bcftools.call.vcf.gz | grep "^SN"
 ```
@@ -345,7 +345,7 @@ VCF format is plain text, and you can use `less mp2.longshot.o.vcf` to see what 
 We also want to see how many snps and indels are in the vcf files.
 ```
 bcftools view -i '%QUAL>=30' mp2.longshot.o.vcf > mp2.longshot.vcf
-bgzip -f mp2.longshot.vcf
+bgzip -f mp2.longshot.vcf -c > mp2.longshot.vcf.gz
 bcftools index -f mp2.longshot.vcf.gz
 bcftools stats mp2.longshot.vcf.gz | grep "TSTV"
 ```
