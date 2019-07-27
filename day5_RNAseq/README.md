@@ -290,6 +290,8 @@ An example plot is shown below:
 
 ![tsne](img/tsne.png)
 
+Note that tSNE results are not reproducible without a PCA initialization [citation](https://www.biorxiv.org/content/biorxiv/early/2018/10/25/453449.full.pdf), so you may want to explore pca first before running tSNE.
+
 - Finding differentially expressed features (cluster biomarkers)
 - find all markers of cluster 1
 ```
