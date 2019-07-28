@@ -16,6 +16,15 @@ conda activate base
 3. Link reference genome by `ln -s /shared/data/ref_hg37_chr1/ref ref`
 4. Link high quality variant file by `ln -s /shared/data/ref_hg37_chr1/vcf vcf`
 
+#### 1.1.1 Check quality of fastq files.
+The tool we used is `fastqc`, and you can use the commands below for this purpose.
+```
+mkdir -p fastqc_output
+fastqc -t 2 -o fastqc_output -f fastq data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.fq
+```
+
+Finally, you will find many new files under `fastqc_output/` for the quality checking. In particular, you will find html files named "XXX_fastqc.html" where "XXX" is the name of the fastq file without `.fastq`. Many useful quality checking could be found in the html file. (We can use a FTP software such as FileZilla to transfer the file from cloud server to local computer to view the html file.)
+
 #### 1.2 Short reads alignment
 In this tutorial, the reads are from a 2MB region in chr1. We will test two ways to do the alignment.
 
