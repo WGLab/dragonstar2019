@@ -14,7 +14,6 @@ This GitHub repository contains lecture slides as well as the computing exercise
     
     Genome assembly by short/long-read sequencing: [Course slide](slides/day2_genome_assembly.pdf), [Computing exercise](https://github.com/WGLab/dragonstar2019/tree/master/day2_assembly)
     
-    Cloud computing: an introduction
 
 - Day 3
 
@@ -28,6 +27,8 @@ This GitHub repository contains lecture slides as well as the computing exercise
     
     Rare variants and de novo variants association studies: [Course slide](slides/day4_rare_denovo_variants.pdf), [Computing exercise](https://github.com/WGLab/dragonstar2019/tree/master/day4_denovo)
     
+   Introduction to cloud computing in bioinformatics
+
 - Day 5
 
     RNA-Seq in human diseases: [Course slide](slides/day5_rnaseq.pdf), [Computing exercise](https://github.com/WGLab/dragonstar2019/tree/master/day5_RNAseq)
