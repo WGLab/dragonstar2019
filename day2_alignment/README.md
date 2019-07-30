@@ -25,6 +25,64 @@ fastqc -t 2 -o fastqc_output -f fastq data/sr.chr1.2mb_1.fq data/sr.chr1.2mb_2.f
 
 Finally, you will find many new files under `fastqc_output/` for the quality checking. In particular, you will find html files named "XXX_fastqc.html" where "XXX" is the name of the fastq file without `.fastq`. Many useful quality checking could be found in the html file. (We can use a FTP software such as FileZilla to transfer the file from cloud server to local computer to view the html file.)
 
+Here, let us take the example figures below to explain the results. More explanation of different figures can be found in [FASTQC help document](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/3%20Analysis%20Modules/).
+
+###### Per Base sequence quality
+Show the plot of quality of each base for all reads (Red: poor; Orange: reasonable; Green: good)
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362452/cdba915e-9154-11e6-9b0d-c2d78d87b191.png" width="600" height="500" />
+
+###### Per sequence quality score
+ Show the number of mean quality for all reads
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362464/d8d56884-9154-11e6-97b1-73ccc82e7129.png" width="600" height="500" />
+
+###### Per base sequence content
+ Show the percentage of A/C/G/G for each position of all reads
+
+*Potential issues:*
+All nucleotides should have similar percentage across all positions.
+In this figure, the first 12 bases have biased fragmentation produced by priming using random hexamers. This is not a problem which can be fixed by processing, and it doesn't seem to adversely affect the ability to measure expression.
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362495/f086c6ee-9154-11e6-830b-8d01c97441e4.png" width="600" height="500" />
+
+###### Kmer content
+ Show significant top 6 Kmers for each position of all reads
+
+*Potential issues:*
+In a diverse libray, Kmers should not have position bias.
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362510/fd7f88a4-9154-11e6-882f-4f7dbc97072a.png" width="600" height="500" />
+
+###### Per sequence GC content
+ Show the distribution of GC content for all reads
+
+*Potential issues:*
+It should be a normal distribution. An unusually shaped distribution might indicate a contamination.
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362519/06b1787e-9155-11e6-9d0d-8d80b23c3b69.png" width="600" height="500" />
+
+##### Per base N content
+Show the percentage of N in each position for all reads. N indicates no sufficient confidence to make a base call.
+
+*Potential issues:*
+The proportion of N content should be low, even nearer the end of read. Significant Ns (5%)  indicate a general loss of quality.
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362536/11cc0d8c-9155-11e6-95af-4020e0426d82.png" width="600" height="500" />
+
+##### Sequence Length distribution
+A simple graph with a single peak
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362550/1eb453d8-9155-11e6-9f03-acf265198754.png" width="600" height="500" />
+
+##### Adapter content
+Show cumulative percentage of adapter sequences
+
+*Potential issues:*
+The proportion should be low. This RNA-seq data has significant adapter content ( as high as 10%)
+
+<img src="https://cloud.githubusercontent.com/assets/16017780/19362566/2913adba-9155-11e6-83e7-29fc4db9ae7b.png" width="600" height="400" />
+
 #### 1.2 Short reads alignment
 In this tutorial, the reads are from a 2MB region in chr1. We will test two ways to do the alignment.
 
