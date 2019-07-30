@@ -38,11 +38,7 @@ Show the plot of quality of each base for all reads (Red: poor; Orange: reasonab
 <img src="https://user-images.githubusercontent.com/16017780/62091854-f768c380-b240-11e9-8fde-375e4d71a651.png" width="600" height="500" />
 
 ###### Per base sequence content
- Show the percentage of A/C/G/G for each position of all reads
-
-*Potential issues:*
-All nucleotides should have similar percentage across all positions.
-In this figure, the first 12 bases have biased fragmentation produced by priming using random hexamers. This is not a problem which can be fixed by processing, and it doesn't seem to adversely affect the ability to measure expression.
+ Show the percentage of A/C/G/G for each position of all reads. All nucleotides should have similar percentage across all positions, shown in the figure.
 
 <img src="https://user-images.githubusercontent.com/16017780/62091851-f768c380-b240-11e9-91dc-4235201fa21d.png" width="600" height="500" />
 
@@ -57,9 +53,6 @@ It should be a normal distribution. An unusually shaped distribution might indic
 ##### Per base N content
 Show the percentage of N in each position for all reads. N indicates no sufficient confidence to make a base call.
 
-*Potential issues:*
-The proportion of N content should be low, even nearer the end of read. Significant Ns (5%)  indicate a general loss of quality.
-
 <img src="https://user-images.githubusercontent.com/16017780/62091849-f768c380-b240-11e9-850f-a30d17447fa9.png" width="600" height="500" />
 
 ##### Sequence Length distribution
@@ -70,8 +63,6 @@ A simple graph with a single peak
 ##### Adapter content
 Show cumulative percentage of adapter sequences
 
-*Potential issues:*
-The proportion should be low. This RNA-seq data has significant adapter content ( as high as 10%)
 
 <img src="https://user-images.githubusercontent.com/16017780/62091857-f8015a00-b240-11e9-9cdf-1b14c74cffbb.png" width="600" height="400" />
 
