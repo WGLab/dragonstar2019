@@ -346,7 +346,7 @@ By looking at the IGV plot, we can see that there is no real evidence showing th
 ### How to use IGV to visualize the deletion
 
 1) download IGV from here: http://data.broadinstitute.org/igv/projects/downloads/2.6/
-2) download the bam file from huawei cloud. (for example, `/shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_callingchr1.2mb.mp2.bam`)
+2) download the bam file (and the bai file) from huawei cloud. (for example, `/shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_callingchr1.2mb.mp2.bam` and `/shared/data/NA12878_test_data/short-reads/aligned_bam_for_sv_callingchr1.2mb.mp2.bam.bai`)
 3) select the reference genome. (for example, Human (b37))
 4) click File->Load from file, and select the bam file. 
 5) type the region you want to see. (for example,  `chr1:156,520,517-156,535,142`). Click "Go". You can see the following image. 
