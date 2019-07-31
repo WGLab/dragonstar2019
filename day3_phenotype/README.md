@@ -39,7 +39,7 @@ disease_annotation.pl /shared/tools/phenolyzer/example_phenotype.txt -file -pred
 Sometimes, if you know the disease name already and do not want to do "phenotype expansion" step, you can omit the `-ph` argument:
 
 ```
-perl disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -file -prediction -logistic -out ex4
+disease_annotation.pl /shared/tools/phenolyzer/example_disease.txt -file -prediction -logistic -out ex4
 ```
 
 Phenolyzer can also directly process HPO terms as phenotypes. For example, one patient was seen by a genetic counselor and the list of HPO terms were recorded in a file (one term per line). We want to analyze the file and prioritize candidate genes:
