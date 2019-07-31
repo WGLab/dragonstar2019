@@ -20,4 +20,55 @@ This is a case that we published a few years ago, on finding disease genes on a 
 
 The original publication used several web servers, including the Phenolyzer server and the wANNOVAR server, to identify the disease causal gene. Your challenge here is not to use any external web servers! Instead, try to use only command line tools to solve this case. You may want to quickly browser through the [paper](http://molecularcasestudies.cshlp.org/content/2/6/a001073.full) first to get an idea of the family and the phenotypic presentation.
 
-This is a more difficult case to study, because the mutation is a de novo mutation. For your convenience, we have downloaded the VCF files for the proband, father, mother, brother 1, brother 2 and sister, to the directory `/shared/data/VCF/SCN8A`. However, we do not know in advance whether a de novo mutation, or two mutations in a recessive gene, is causal for the disease. So all the possibilities should be considered in our analysis.
+This is a more difficult case to study, because the mutation is a de novo mutation. For your convenience, we have downloaded the VCF files for the proband, father, mother, brother 1, brother 2 and sister, to the directory `/shared/data/VCF/SCN8A`. 
+
+To make things easier, below is a list of clinical phenotypes on the patient as reported in the paper. You can save it in a file.
+
+```
+HP:0200134
+HP:0010818
+HP:0007193
+HP:0002353
+HP:0001263
+HP:0006834
+HP:0002376
+HP:0001344
+HP:0010864
+HP:0001270
+HP:0001290
+HP:0012389
+HP:0009062
+HP:0000467
+HP:0002063
+HP:0001257
+HP:0001531
+HP:0011471
+HP:0002020
+HP:0002015
+HP:0002880
+HP:0012418
+HP:0100765
+HP:0002870
+HP:0000248
+HP:0000337
+HP:0000431
+HP:0000430
+HP:0000293
+HP:0000212
+HP:0000347
+HP:0002267
+HP:0002345
+HP:0000643
+HP:0001283
+HP:0000639
+HP:0001347
+HP:0008763
+```
+
+You can first do the analysis by looking at predicted de novo mutations in the proband (i.e. those mutations in proband that are not in parents).
+
+However, we do not know in advance whether a de novo mutation, or two deleterious mutations (one inherited from father, one inherited from mother) in a recessive gene, is causal for the disease. So next we should consider this possibility.
+
+
+
+
