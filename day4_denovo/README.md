@@ -2,7 +2,7 @@
 
 In this exercise, we will analyze an exome file in VCF format for a patient and find the likely causal gene and a possible genetic diagnosis.
 
-The VCF file is at /shared/data/vcf/anemia.vcf. The phenotype is 'hemolytic anemia'.
+The VCF file is at /shared/data/VCF/anemia.vcf. The phenotype is 'hemolytic anemia'.
 
 We will perform variant annotation first and generate multianno file.
 
