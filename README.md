@@ -36,3 +36,5 @@ This GitHub repository contains lecture slides as well as the computing exercise
     Deep Learning in sequencing data analysis: [Course slide](slides/day5_deep_learning.pdf)
 
     Artificial intelligence and somatic variant analysis
+
+Housekeeping issues and acknowledgements are given [here](slides/house_keeping.pdf).
